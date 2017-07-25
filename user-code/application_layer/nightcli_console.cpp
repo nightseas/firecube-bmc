@@ -178,6 +178,8 @@ int nightcli_console_loop( Serial &console )
     // Console input command handling loop
     while( 1 )
     {   
+        flag_exit_reading_loop = 0;
+        
         esc_seq_len = 0;
         
         console_cur_index = 0;
@@ -288,6 +290,7 @@ int nightcli_console_loop( Serial &console )
                 case KEY_CTL( 'c' ):
                     console_cur_index = 0;
                     flag_exit_reading_loop = 1;
+                    console.puts( "\n\r" );
                     break;
                 
                 // Put any other displayable char into buffer
@@ -322,6 +325,6 @@ int nightcli_console_loop( Serial &console )
             break;
     }
     
-    console.printf( "NightCLI: exiting console command loop... ( could an error? )\n\r" );
+    console.printf( "NightCLI: exiting console command loop... ( could be an error? )\n\r" );
     return 0;
 }
