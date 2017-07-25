@@ -49,8 +49,6 @@ int cli_commands_init( void )
     ret += nightcli_command_register( &cmd_sysinfo );
     ret += nightcli_command_register( &cmd_echo );
     ret += nightcli_command_register( &cmd_i2c );
-    ret += nightcli_command_register( &cmd_repeater );
-    ret += nightcli_command_register( &cmd_rgpr );
     return ret;
 }
 

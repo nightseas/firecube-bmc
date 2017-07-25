@@ -32,8 +32,6 @@ static void thread_callback_ipmb( void );
 
 int threads_init( void )
 {
-    thread_ioctrl.start( thread_callback_ioctrl );
-       
     //thread_ipmb.start( thread_callback_ipmb );
     
     // Put the CLI thread in the last, or it could impact other threads

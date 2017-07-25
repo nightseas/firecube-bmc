@@ -24,8 +24,10 @@
 
 /*-----------------------------------------------------------*/
 
-//On-board LED number
-extern const int LED_NUM_MAX;
+// On-board LED number
+#define LED_NUM_MAX    4
+// I2C master number
+#define I2C_MS_MAX     1
 
 /*-----------------------------------------------------------*/
 

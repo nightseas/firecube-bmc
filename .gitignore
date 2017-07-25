@@ -33,3 +33,6 @@
 
 # Build folder
 BUILD/*
+
+# uVision stuff
+firecube-bmc.uvguix.*

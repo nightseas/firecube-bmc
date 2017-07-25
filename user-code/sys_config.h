@@ -36,23 +36,18 @@
 // Threads and handler functions
 #include "th_common.h"
 #include "th_cli.h"
-#include "th_ioctrl.h"
 
 // Night-CLI and CLI relative commands
 #include "nightcli.h"
 #include "cmd_common.h"
 #include "cmd_i2c.h"
-#include "cmd_repeater.h"
-#include "cmd_gpr.h"
 
 /*-----------------------------------------------------------*/
 
 // Peripheral Layer Modules
 
 // Board lib
-#include "pe_pcie_evb_lib.h"
-// DS80PCIxxx Peripheral Lib
-#include "pe_ds80.h"
+#include "pe_x411_lib.h"
 // STM32F4 UUID Peripheral Lib
 #include "pe_f4_uuid.h"
 

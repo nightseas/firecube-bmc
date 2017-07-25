@@ -150,7 +150,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Target>
           <RunDebugAfterBuild>0</RunDebugAfterBuild>
-          <TargetSelection>6</TargetSelection>
+          <TargetSelection>11</TargetSelection>
           <SimDlls>
             <CpuDll></CpuDll>
             <CpuDllArguments></CpuDllArguments>
@@ -164,7 +164,7 @@
             <PeripheralDll></PeripheralDll>
             <PeripheralDllArguments></PeripheralDllArguments>
             <InitializationFile></InitializationFile>
-            <Driver>Segger\JL2CM3.dll</Driver>
+            <Driver>STLink\ST-LINKIII-KEIL_SWO.dll</Driver>
           </TargetDlls>
         </DebugOption>
         <Utilities>
@@ -3952,16 +3952,6 @@
               <FilePath>./user-code/application_layer/cmd_common.h</FilePath>
             </File>
             <File>
-              <FileName>cmd_gpr.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>./user-code/application_layer/cmd_gpr.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_gpr.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>./user-code/application_layer/cmd_gpr.h</FilePath>
-            </File>
-            <File>
               <FileName>cmd_i2c.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>./user-code/application_layer/cmd_i2c.cpp</FilePath>
@@ -3970,16 +3960,6 @@
               <FileName>cmd_i2c.h</FileName>
               <FileType>5</FileType>
               <FilePath>./user-code/application_layer/cmd_i2c.h</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_repeater.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>./user-code/application_layer/cmd_repeater.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>cmd_repeater.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>./user-code/application_layer/cmd_repeater.h</FilePath>
             </File>
             <File>
               <FileName>nightcli.h</FileName>
@@ -4016,31 +3996,11 @@
               <FileType>5</FileType>
               <FilePath>.\user-code\application_layer\th_cli.h</FilePath>
             </File>
-            <File>
-              <FileName>th_ioctrl.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>.\user-code\application_layer\th_ioctrl.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>th_ioctrl.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\user-code\application_layer\th_ioctrl.h</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>peripheral-layer</GroupName>
           <Files>
-            <File>
-              <FileName>pe_pcie_evb_lib.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>./user-code/peripheral_layer/pe_pcie_evb_lib.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>pe_pcie_evb_lib.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>./user-code/peripheral_layer/pe_pcie_evb_lib.h</FilePath>
-            </File>
             <File>
               <FileName>pe_f4_uuid.cpp</FileName>
               <FileType>8</FileType>
@@ -4052,14 +4012,14 @@
               <FilePath>./user-code/peripheral_layer/pe_f4_uuid.h</FilePath>
             </File>
             <File>
-              <FileName>pe_ds80.cpp</FileName>
+              <FileName>pe_x411_lib.cpp</FileName>
               <FileType>8</FileType>
-              <FilePath>./user-code/peripheral_layer/pe_ds80.cpp</FilePath>
+              <FilePath>.\user-code\peripheral_layer\pe_x411_lib.cpp</FilePath>
             </File>
             <File>
-              <FileName>pe_ds80.h</FileName>
+              <FileName>pe_x411_lib.h</FileName>
               <FileType>5</FileType>
-              <FilePath>./user-code/peripheral_layer/pe_ds80.h</FilePath>
+              <FilePath>.\user-code\peripheral_layer\pe_x411_lib.h</FilePath>
             </File>
           </Files>
         </Group>
