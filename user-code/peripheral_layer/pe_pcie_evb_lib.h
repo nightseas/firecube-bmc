@@ -25,14 +25,16 @@
 /*-----------------------------------------------------------*/
 
 // On-board LED number
-extern const int LED_NUM_MAX;
+#define LED_NUM_MAX    4
+// I2C master number
+#define I2C_MS_MAX     2
 
 /*-----------------------------------------------------------*/
 
 // LEDs on mother board and daughter board
 extern DigitalOut led_mb1, led_mb2, led_mb3, led_mb4;
 
-// USART1 connect to PC for debug/cli
+// USART connect to PC for debug/cli
 extern Serial serial_debug; // CLI interface on debug header
 
 // I2C master for repeater config

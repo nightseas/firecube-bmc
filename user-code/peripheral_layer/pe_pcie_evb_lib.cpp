@@ -23,9 +23,6 @@
 
 /*-----------------------------------------------------------*/
 
-// On-board LED number
-const int LED_NUM_MAX = 4;
-
 // Board serial number buffer size
 const int BD_SN_LEN = 16;
 
@@ -37,7 +34,7 @@ const int BD_CONFIG_LEN = 16;
 // LEDs on mother board and daughter board
 DigitalOut led_mb2( PA_0 ), led_mb3( PA_1 ), led_mb4( PA_2 ), led_mb1( PA_3 ); // led_mb1 is remapped from PA3_PWM2_LED3
 
-// USART1 connect to PC for debug/cli
+// USART connect to PC for debug/cli
 Serial serial_debug( PA_9, PA_10 ); // CLI interface on debug header
 
 // I2C master for repeater config
@@ -97,11 +94,19 @@ int boardlib_init( void )
     
     // Dump board info 
     boardlib_info_dump();
-    
+        
     // Init all repeaters discovered on both two I2C buses
-    ds80_init_all( i2c_ms1 );
-    ds80_init_all( i2c_ms2 );
-    
+    if( ds80_init_all( i2c_ms1, 'r' ) != 0 )
+    {
+        serial_debug.printf("No repeater found on bus 1.\r\n\r\n");
+    }
+#if( I2C_MS_MAX > 1 )
+    if( ds80_init_all( i2c_ms2, 'r' ) != 0 )
+    {
+        serial_debug.printf("No repeater found on bus 2.\r\n\r\n");
+    }
+#endif
+
     //LED states after board lib init: all off    
     led_mb1 = 1;
     led_mb2 = 1;

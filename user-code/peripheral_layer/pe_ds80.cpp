@@ -98,7 +98,8 @@ const float ds80_eq_db_4ghz_table[] = {  4.9,  7.9,  9.9, 11.0, 14.3, 14.6, 17.0
 
 /*-----------------------------------------------------------*/
 
-int ds80_init_all( I2C &i2c_bus )
+// config: d - default, r - RC, e - EP.
+int ds80_init_all( I2C &i2c_bus, char config )
 {
     int ds80_i2c_devs[8];
     int dev_num;
@@ -110,15 +111,14 @@ int ds80_init_all( I2C &i2c_bus )
     {
         for( int i=0; i< dev_num; i++ )
         {            
-            ds80_set_eq_dem ( i2c_ms1, ds80_i2c_devs[i], 'd' );
-            ds80_dump_eq_dem( i2c_ms1, ds80_i2c_devs[i] );
+            ds80_set_eq_dem ( i2c_bus, ds80_i2c_devs[i], config );
+            ds80_dump_eq_dem( i2c_bus, ds80_i2c_devs[i] );
         }
     }
     else
     {
-        serial_debug.printf( "No repeater found on I2C bus 1.\n\r\n\r" );
         return -1;
-    } 
+    }
     
     return 0;
 }
@@ -129,31 +129,33 @@ int ds80_init_all( I2C &i2c_bus )
 int ds80_set_eq_dem( I2C &i2c_bus, int dev_id, char config )
 {
     int data_len = sizeof( ds80_default_config ) / sizeof( ds80_default_config[0] );
-    for( int i = 0; i < data_len; i++ )
+    
+    switch( config )
     {
-        switch( config )
-        {
-            // Default configuration
-            case 'd':
-                serial_debug.printf( "DS80 I2C: Set device 0x%02X to default config.\n\r", dev_id );
+        // Default configuration
+        case 'd':
+            for( int i = 0; i < data_len; i++ )
+            {
                 if( i2c_bus.write( dev_id << 1, ds80_default_config[i], 2 ) != 0 )
                 {
                     serial_debug.printf( "DS80 I2C: write to device 0x%02X failed!\n\r\n\r", dev_id );
                     return -1;
                 }
-                break;
-            
-            // Configuration for both PCIe RootComplex and EndPoint
-            case 'r':
-            case 'e':
-                serial_debug.printf( "DS80 I2C: Set device 0x%02X to optimized config.\n\r", dev_id );
+            }
+            break;
+        
+        // Configuration for both PCIe RootComplex and EndPoint
+        case 'r':
+        case 'e':
+            for( int i = 0; i < data_len; i++ )
+            {
                 if( i2c_bus.write( dev_id << 1, ds80_rc_ep_config[i], 2 ) != 0 )
                 {
                     serial_debug.printf( "DS80 I2C: write to device 0x%02X failed!\n\r\n\r", dev_id );
                     return -1;
                 }
-                break;
-        }
+            }
+            break;
     }
     return 0;
 }
@@ -181,6 +183,9 @@ int ds80_scan_dev( I2C &i2c_bus, int *dev_ids )
                     *dev_ids = id;
                     dev_ids++;
                     dev_num++;
+                    break;
+                
+                default:
                     break;
             }
         }

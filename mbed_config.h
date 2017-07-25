@@ -34,10 +34,14 @@
 #define MBED_CONF_NSAPI_PRESENT                        1                                             // set by library:nsapi
 #define MBED_CONF_FILESYSTEM_PRESENT                   1                                             // set by library:filesystem
 #define MBED_CONF_PPP_CELL_IFACE_BAUD_RATE             115200                                        // set by library:ppp-cell-iface
-#define MBED_CONF_PLATFORM_STDIO_CONVERT_NEWLINES      0                                             // set by library:platform
+#define MBED_CONF_PLpATFORM_STDIO_CONVERT_NEWLINES      0                                             // set by library:platform
 #define MBED_CONF_PPP_CELL_IFACE_AT_PARSER_BUFFER_SIZE 256                                           // set by library:ppp-cell-iface
 #define MBED_CONF_PLATFORM_STDIO_BAUD_RATE             9600                                          // set by library:platform
-#define CLOCK_SOURCE                                   USE_PLL_HSE_EXTC|USE_PLL_HSE_XTAL|USE_PLL_HSI // set by target:NUCLEO_F411RE
+
+// No ext-clock on board, only 8MHz XTAL
+//#define CLOCK_SOURCE                                   USE_PLL_HSE_EXTC|USE_PLL_HSE_XTAL|USE_PLL_HSI // set by target:NUCLEO_F411RE
+#define CLOCK_SOURCE                                   USE_PLL_HSE_XTAL|USE_PLL_HSI
+
 // Macros
 #define UNITY_INCLUDE_CONFIG_H                                                                       // defined by library:utest
 

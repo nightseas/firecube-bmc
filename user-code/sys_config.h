@@ -34,7 +34,10 @@
 // Application Layer Modules
 
 // Threads and handler functions
-#include "threads.h"
+#include "th_common.h"
+#include "th_cli.h"
+#include "th_ioctrl.h"
+
 // Night-CLI and CLI relative commands
 #include "nightcli.h"
 #include "cmd_common.h"

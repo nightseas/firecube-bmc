@@ -23,11 +23,6 @@
 
 /*-----------------------------------------------------------*/
 
-// Enable second I2C bus
-#define RPT_I2C_BUS2
-
-/*-----------------------------------------------------------*/
-
 const CLI_Command_t cmd_repeater =
 {
     "repeater",
@@ -41,43 +36,15 @@ const CLI_Command_t cmd_repeater =
 int command_callback_repeater( char *command_output, int output_buf_len, const char *command_string )
 {
 
-    int ds80_i2c_devs[8];
-    int dev_num;
-    
-    //Clear output buffer
-    command_output[0] = '\0';
-    
-    memset( ds80_i2c_devs, 0, 8);
-    dev_num = ds80_scan_dev( i2c_ms1, ds80_i2c_devs );
-    
-    if( dev_num > 0 )
+    // Init all repeaters discovered on both two I2C buses
+    if( ds80_init_all( i2c_ms1, 'r' ) != 0 )
     {
-        for( int i=0; i< dev_num; i++ )
-        {            
-            ds80_set_eq_dem ( i2c_ms1, ds80_i2c_devs[i], 'r' );
-            ds80_dump_eq_dem( i2c_ms1, ds80_i2c_devs[i] );
-        }
+        serial_debug.printf("No repeater found on bus 1.\r\n\r\n");
     }
-    else
+#if( I2C_MS_MAX > 1 )
+    if( ds80_init_all( i2c_ms2, 'r' ) != 0 )
     {
-        serial_debug.printf("No repeater found on I2C bus 1.\n\r\n\r");
-    }
-    
-#ifdef RPT_I2C_BUS2
-    memset( ds80_i2c_devs, 0, 8);
-    dev_num = ds80_scan_dev( i2c_ms2, ds80_i2c_devs );
-    
-    if( dev_num > 0 )
-    {
-        for( int i=0; i< dev_num; i++ )
-        {           
-            ds80_set_eq_dem ( i2c_ms2, ds80_i2c_devs[i], 'r' );
-            ds80_dump_eq_dem( i2c_ms2, ds80_i2c_devs[i] );
-        }
-    }
-    else
-    {
-        serial_debug.printf("No repeater found on I2C bus 2.\n\r\n\r");
+        serial_debug.printf("No repeater found on bus 2.\r\n\r\n");
     }
 #endif
     
