@@ -38,9 +38,7 @@
 #define MBED_CONF_PPP_CELL_IFACE_AT_PARSER_BUFFER_SIZE 256                                           // set by library:ppp-cell-iface
 #define MBED_CONF_PLATFORM_STDIO_BAUD_RATE             9600                                          // set by library:platform
 
-// No ext-clock on board, only 8MHz XTAL
-//#define CLOCK_SOURCE                                   USE_PLL_HSE_EXTC|USE_PLL_HSE_XTAL|USE_PLL_HSI // set by target:NUCLEO_F411RE
-#define CLOCK_SOURCE                                   USE_PLL_HSE_XTAL|USE_PLL_HSI
+#define CLOCK_SOURCE                                   USE_PLL_HSE_EXTC|USE_PLL_HSE_XTAL|USE_PLL_HSI // set by target:NUCLEO_F411RE
 
 // Macros
 #define UNITY_INCLUDE_CONFIG_H                                                                       // defined by library:utest
