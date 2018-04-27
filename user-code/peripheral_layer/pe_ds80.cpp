@@ -25,8 +25,14 @@
 
 #define DEVID_DS80PCI102    0x77
 #define DEVID_DS80PCI402    0x44
+#define DEVID_DS80PCI800    0x45
+#define DEVID_DS80PCI810    0x85
 
 #define DS80_REG_DEVID      0x51
+
+#define DS80_REG_SD_MON     0x0A
+#define DS80_REG_RX_CHB0    0x11
+
 
 /*-----------------------------------------------------------*/
 
@@ -59,19 +65,19 @@ const char ds80_default_config[][2] = { { 0x06, 0x18 },   // Enables SMBus Slave
 };
 
 
-// CHA_INs are from OCulink, CHB_INs are from CPU (RC) or FPGA/GPU (EP)
+// DS80PCI800: Both CHA_IN & CHB_IN are from OCulink 
 // TI suggested config for both RC & EP:{ REG, VALUE }
-const char ds80_rc_ep_config[][2] =   { { 0x06, 0x18 },   // Enables SMBus Slave Mode Register Control
-                                        { 0x0F, 0x00 },   // Set CHB_0 EQ to 0x00   (4.9 dB).
+const char ds80_rx_config[][2] =      { { 0x06, 0x18 },   // Enables SMBus Slave Mode Register Control
+                                        { 0x0F, 0x03 },   // Set CHB_0 EQ to 0x03   (11 dB).
                                         { 0x10, 0xAD },   // Set CHB_0 VOD to 101'b (1.2 Vp-p).
                                         { 0x11, 0x00 },   // Set CHB_0 DEM to 000'b (0 dB).
-                                        { 0x16, 0x00 },   // Set CHB_1 EQ to 0x00   (4.9 dB).
+                                        { 0x16, 0x03 },   // Set CHB_1 EQ to 0x03   (11 dB).
                                         { 0x17, 0xAD },   // Set CHB_1 VOD to 101'b (1.2 Vp-p).
                                         { 0x18, 0x00 },   // Set CHB_1 DEM to 000'b (0 dB).
-                                        { 0x1D, 0x00 },   // Set CHB_2 EQ to 0x00   (4.9 dB).
+                                        { 0x1D, 0x03 },   // Set CHB_2 EQ to 0x03   (11 dB).
                                         { 0x1E, 0xAD },   // Set CHB_2 VOD to 101'b (1.2 Vp-p).
                                         { 0x1F, 0x00 },   // Set CHB_2 DEM to 000'b (0 dB).
-                                        { 0x24, 0x00 },   // Set CHB_3 EQ to 0x00   (4.9 dB).
+                                        { 0x24, 0x03 },   // Set CHB_3 EQ to 0x03   (11 dB).
                                         { 0x25, 0xAD },   // Set CHB_3 VOD to 101'b (1.2 Vp-p).
                                         { 0x26, 0x00 },   // Set CHB_3 DEM to 000'b (0 dB).
                                         { 0x2C, 0x03 },   // Set CHA_0 EQ to 0x03   (11 dB).
@@ -96,10 +102,49 @@ const float ds80_dem_db_table[] = { 0, 1.5, 3.5, 5, 6, 8, 9, 12 };
 const char ds80_eq_level_table[]    = { 0x00, 0x01, 0x02, 0x03, 0x07, 0x15, 0x0B, 0x0F, 0x55, 0x1F, 0x2F, 0x3F, 0xAA, 0x7F, 0xBF, 0xFF };
 const float ds80_eq_db_4ghz_table[] = {  4.9,  7.9,  9.9, 11.0, 14.3, 14.6, 17.0, 18.5, 18.0, 22.0, 24.4, 25.8, 27.4, 29.0, 31.4, 32.7 };
 
+
+
 /*-----------------------------------------------------------*/
 
-// config: d - default, r - RC, e - EP.
-int ds80_init_all( I2C &i2c_bus, char config )
+int ds80_config_set_all( I2C &i2c_bus )
+{
+    int ds80_i2c_devs[8];
+    int dev_num;
+    char config = 'd';
+    
+    memset( ds80_i2c_devs, 0, 8);
+    dev_num = ds80_scan_dev( i2c_bus, ds80_i2c_devs );
+    
+    if( dev_num > 0 )
+    {
+        for( int i=0; i< dev_num; i++ )
+        {
+            if( ds80_i2c_devs[i] % 2 == 0 )
+            {
+                serial_debug.printf( "DS80: Config repeater 0x%02X to TX mode.\n\r", ds80_i2c_devs[i] );
+                config = 't';
+            }
+            else
+            {
+                serial_debug.printf( "DS80: Config repeater 0x%02X to RX mode.\n\r", ds80_i2c_devs[i] );
+                config = 'r';
+            }
+            
+            ds80_set_eq_dem ( i2c_bus, ds80_i2c_devs[i], config );
+            //ds80_dump_eq_dem( i2c_bus, ds80_i2c_devs[i] );
+        }
+    }
+    else
+    {
+        return -1;
+    }
+    
+    return 0;
+}
+
+/*-----------------------------------------------------------*/
+
+int ds80_config_dump_all( I2C &i2c_bus )
 {
     int ds80_i2c_devs[8];
     int dev_num;
@@ -110,8 +155,7 @@ int ds80_init_all( I2C &i2c_bus, char config )
     if( dev_num > 0 )
     {
         for( int i=0; i< dev_num; i++ )
-        {            
-            ds80_set_eq_dem ( i2c_bus, ds80_i2c_devs[i], config );
+        {
             ds80_dump_eq_dem( i2c_bus, ds80_i2c_devs[i] );
         }
     }
@@ -125,15 +169,40 @@ int ds80_init_all( I2C &i2c_bus, char config )
 
 /*-----------------------------------------------------------*/
 
-// config: d - default, r - RC, e - EP.
+int ds80_status_dump_all( I2C &i2c_bus )
+{
+    int ds80_i2c_devs[8];
+    int dev_num;
+    
+    memset( ds80_i2c_devs, 0, 8);
+    dev_num = ds80_scan_dev( i2c_bus, ds80_i2c_devs );
+    
+    if( dev_num > 0 )
+    {
+        for( int i=0; i< dev_num; i++ )
+        {
+            ds80_dump_status( i2c_bus, ds80_i2c_devs[i] );
+        }
+    }
+    else
+    {
+        return -1;
+    }
+    
+    return 0;
+}
+
+/*-----------------------------------------------------------*/
+
+// config: d - default, r - RX repeaters, t - TX repeaters.
 int ds80_set_eq_dem( I2C &i2c_bus, int dev_id, char config )
 {
     int data_len = sizeof( ds80_default_config ) / sizeof( ds80_default_config[0] );
-    
     switch( config )
     {
-        // Default configuration
+        // Default configuration, for both RC & EP adaptor TX repeaters
         case 'd':
+        case 't':
             for( int i = 0; i < data_len; i++ )
             {
                 if( i2c_bus.write( dev_id << 1, ds80_default_config[i], 2 ) != 0 )
@@ -144,12 +213,12 @@ int ds80_set_eq_dem( I2C &i2c_bus, int dev_id, char config )
             }
             break;
         
-        // Configuration for both PCIe RootComplex and EndPoint
+        // Optimized configuration for both RC & EP adaptor RX repeaters
         case 'r':
-        case 'e':
             for( int i = 0; i < data_len; i++ )
             {
-                if( i2c_bus.write( dev_id << 1, ds80_rc_ep_config[i], 2 ) != 0 )
+                
+                if( i2c_bus.write( dev_id << 1, ds80_rx_config[i], 2 ) != 0 )
                 {
                     serial_debug.printf( "DS80 I2C: write to device 0x%02X failed!\n\r\n\r", dev_id );
                     return -1;
@@ -175,14 +244,21 @@ int ds80_scan_dev( I2C &i2c_bus, int *dev_ids )
             {
                 case DEVID_DS80PCI102:
                     serial_debug.printf( "DS80: Find DS80PCI102 at addr 0x%02X!\n\r", id );
-                    dev_num++;
                     break;
                 
                 case DEVID_DS80PCI402:
                     serial_debug.printf( "DS80: Find DS80PCI402 at addr 0x%02X!\n\r", id );
+                    break;
+                
+                case DEVID_DS80PCI800:
+                    serial_debug.printf( "DS80: Find DS80PCI800 at addr 0x%02X!\n\r", id );
                     *dev_ids = id;
                     dev_ids++;
                     dev_num++;
+                    break;
+                
+                case DEVID_DS80PCI810:
+                    serial_debug.printf( "DS80: Find DS80PCI810 at addr 0x%02X!\n\r", id );
                     break;
                 
                 default:
@@ -280,6 +356,86 @@ int ds80_dump_eq_dem( I2C &i2c_bus, int dev_id )
 
 int ds80_dump_status( I2C &i2c_bus, int dev_id )
 {
+    char sd_th;
+    char i2c_buf[1];
+    char status_buf[8];
+
+    // Read SD_TH. all EQ, VOD and DEM configs.
+    i2c_buf[0] = DS80_REG_SD_MON;
+    if( i2c_bus.write( dev_id << 1, i2c_buf, 1 ) != 0 )
+    {
+        serial_debug.printf( "DS80 I2C: write to device 0x%02X failed!\n\r\n\r", dev_id );
+        return -1;
+    }        
+    if( i2c_bus.read( dev_id << 1, i2c_buf, 1 ) != 0 )
+    {
+        serial_debug.printf( "DS80 I2C: read from device 0x%02X failed!\n\r\n\r", dev_id );
+        return -2;   
+    }
+    sd_th = i2c_buf[0];
+    
+    // Read SD_TH. all EQ, VOD and DEM configs.
+    for ( int i=0; i<8; i++ )
+    {
+        i2c_buf[0] = i * 7 + DS80_REG_RX_CHB0;
+        if( i2c_bus.write( dev_id << 1, i2c_buf, 1 ) != 0 )
+        {
+            serial_debug.printf( "DS80 I2C: write to device 0x%02X failed!\n\r\n\r", dev_id );
+            return -3;
+        }        
+        if( i2c_bus.read( dev_id << 1, i2c_buf, 1 ) != 0 )
+        {
+            serial_debug.printf( "DS80 I2C: read from device 0x%02X failed!\n\r\n\r", dev_id );
+            return -4;   
+        }
+        status_buf[i] = i2c_buf[0];    
+    }
+    
+    // Analyze status.
+    
+    // Column head
+    serial_debug.printf( "CH     SDTH     RXDET     RATE\n\r" );
+    serial_debug.printf( "--------------------------------\n\r" );
+    
+    for( int i=0; i<8; i++ )
+    {
+        // Raw head
+        if( i < 4 )        
+            serial_debug.printf( "B%01d     ", i );
+        else
+            serial_debug.printf( "A%01d     ", i - 4 );
+        
+        // Dump SD_TH status (Internal Signal Detector Indicator)
+        // 0 = Signal detected at input (active data), 1 = Signal not detected at input (idle state)
+        if( !( sd_th & ( 0x1 << i ) ) )
+            serial_debug.printf( "ACT      " );
+        else
+            serial_debug.printf( "IDLE     " );
+        
+        // Dump RXDET status
+        if( status_buf[i] & 0x80 )
+            serial_debug.printf( "YES       " );
+        else
+            serial_debug.printf( "NO        " );
+            
+        // Dump RXDET status
+        switch( status_buf[i] & 0x60 )
+        {
+            case 0x0:
+                serial_debug.printf( "GEN1\n\r" );
+                break;
+            case 0x1:
+                serial_debug.printf( "GEN2\n\r" );
+                break;
+            case 0x3:
+                serial_debug.printf( "GEN3\n\r" );
+                break;
+            default:
+                serial_debug.printf( "UNKN\n\r" );
+        }
+    }
+    
+    serial_debug.printf( "--------------------------------\n\r\n\r" );
     
     return 0;
 }

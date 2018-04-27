@@ -47,24 +47,14 @@ int command_callback_rgpr( char *command_output, int output_buf_len, const char 
 
     serial_debug.printf("\n\r\n\r\n\r===============================\n\r=        GPIO Registers       =\n\r===============================\n\r");
     
-    serial_debug.printf(" PGOOD_MB      : %c\n\r", GET_GPR_STATUS(pgood_mb));
-    serial_debug.printf(" PGOOD_DB      : %c\n\r", GET_GPR_STATUS(pgood_db));
-    serial_debug.printf(" OCL1_PGOOD    : %c\n\r", GET_GPR_STATUS(pgood_ocl1));
-    serial_debug.printf(" OCL2_PGOOD    : %c\n\r", GET_GPR_STATUS(pgood_ocl2)); 
-    
-    serial_debug.printf(" PERST_CPU_L   : %c\n\r", GET_GPR_STATUS(reset_cpu));
-    serial_debug.printf(" PERST_PCH_L   : %c\n\r", GET_GPR_STATUS(reset_pch));
     serial_debug.printf(" OCL1_RST#     : %c\n\r", GET_GPR_STATUS(reset_ocl1));
     serial_debug.printf(" OCL2_RST#     : %c\n\r", GET_GPR_STATUS(reset_ocl2));
-    serial_debug.printf(" NVME1_RST#    : %c\n\r", GET_GPR_STATUS(reset_nvme1));
+    serial_debug.printf(" OCL1_RST#     : %c\n\r", GET_GPR_STATUS(reset_ocl3));
+    serial_debug.printf(" OCL2_RST#     : %c\n\r", GET_GPR_STATUS(reset_ocl4));
     
-    serial_debug.printf(" OCL1_PRSNT#   : %c\n\r", GET_GPR_STATUS(present_ocl1));
-    serial_debug.printf(" OCL2_PRSNT#   : %c\n\r", GET_GPR_STATUS(present_ocl2));
-    
-    serial_debug.printf(" OCL1_WAKE#    : %c\n\r", GET_GPR_STATUS(wake_ocl1));
-    serial_debug.printf(" OCL1_WAKE#    : %c\n\r", GET_GPR_STATUS(wake_ocl2));
-    serial_debug.printf(" NVME1_WAKE#   : %c\n\r", GET_GPR_STATUS(wake_nvme1));
-    
+    serial_debug.printf(" PSLOT1_PRSNT#   : %c\n\r", GET_GPR_STATUS(present_slot1));
+    serial_debug.printf(" PSLOT2_PRSNT#   : %c\n\r", GET_GPR_STATUS(present_slot2));
+        
     serial_debug.printf("\n\r\n\r");
     
     return 0;

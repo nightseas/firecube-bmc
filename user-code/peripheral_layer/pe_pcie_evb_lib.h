@@ -27,29 +27,26 @@
 // On-board LED number
 #define LED_NUM_MAX    4
 // I2C master number
-#define I2C_MS_MAX     2
+#define I2C_MS_MAX     1
 
 /*-----------------------------------------------------------*/
 
 // LEDs on mother board and daughter board
-extern DigitalOut led_mb1, led_mb2, led_mb3, led_mb4;
+extern DigitalOut led_mb1, led_mb2, led_mb3, led_mb4, led_mb5, led_mb6, led_mb7, led_mb8;
 
 // USART connect to PC for debug/cli
 extern Serial serial_debug; // CLI interface on debug header
 
 // I2C master for repeater config
-extern I2C i2c_ms1, i2c_ms2;
+extern I2C i2c_ms1;
 
-// I2C slave connected to PCH on mother board
-extern I2CSlave i2c_sl1;
+// I2C slave connected to OCuLink remote control channels
+extern I2CSlave i2c_slv1, i2c_slv2;
 
 // Misc control signals
-extern DigitalIn reset_cpu, reset_pch;       // PCIe reset input from CPU and PCH (reserved)
-extern DigitalIn pgood_mb, pgood_db;        // Power good input from motherboard and daughter board 
-extern DigitalIn pgood_ocl1, pgood_ocl2;     // Power good input from OCuLink
-extern DigitalIn present_ocl1, present_ocl2; // OCuLink end point present input
-extern DigitalIn wake_ocl1, wake_ocl2, wake_nvme1;     // Wake request singals, reserved
-extern DigitalOut reset_ocl1, reset_ocl2, reset_nvme1; // PCIe reset output to OCuLink and NVMe
+extern DigitalIn reset_ocl1, reset_ocl2, reset_ocl3, reset_ocl4; // PCIe reset input from OCuLink
+extern DigitalIn present_slot1, present_slot2; // PCIe present input from PCIe slot
+extern DigitalIn pgood_3v; // Power good singal from DC/DC
 
 /*-----------------------------------------------------------*/
 

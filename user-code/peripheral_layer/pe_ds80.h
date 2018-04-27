@@ -27,8 +27,9 @@
 //DS80PCIxxx debug functions
 extern int ds80_scan_dev( I2C &i2c_bus, int *dev_ids );
 
-// config: d - default, r - RC, e - EP.
-extern int ds80_init_all( I2C &i2c_bus, char config );
+extern int ds80_config_set_all( I2C &i2c_bus );
+extern int ds80_config_dump_all( I2C &i2c_bus );
+extern int ds80_status_dump_all( I2C &i2c_bus );
 
 // config: d - default, r - RC, e - EP.
 extern int ds80_set_eq_dem( I2C &i2c_bus, int dev_id, char config );

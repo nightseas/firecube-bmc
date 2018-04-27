@@ -54,22 +54,22 @@ static void thread_callback_ipmb( void )
     
     serial_debug.printf( "Thread: <IPMB thread> started.\n\r" );  
 
-    i2c_sl1.address( IPMB_DEV_ADDR << 1 );
+    i2c_slv1.address( IPMB_DEV_ADDR << 1 );
     while ( 1 )
     {
-        int i = i2c_sl1.receive();
+        int i = i2c_slv1.receive();
         switch ( i )
         {
             case I2CSlave::ReadAddressed:
-            i2c_sl1.write( msg, 10 );
+            i2c_slv1.write( msg, 10 );
             break;
             case I2CSlave::WriteGeneral:
-            i2c_sl1.read( buf, 10 );
+            i2c_slv1.read( buf, 10 );
             serial_debug.printf( "IPMB WG: 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X\n\r", 
                                  buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7], buf[8], buf[9] );
             break;
             case I2CSlave::WriteAddressed:
-            i2c_sl1.read( buf, 10 );
+            i2c_slv1.read( buf, 10 );
             serial_debug.printf( "IPMB WA: 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X 0x%02X\n\r", 
                                  buf[0], buf[1], buf[2], buf[3], buf[4], buf[5], buf[6], buf[7], buf[8], buf[9] );
             break;
