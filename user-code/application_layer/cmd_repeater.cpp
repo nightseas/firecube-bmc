@@ -29,7 +29,7 @@ const CLI_Command_t cmd_repeater =
     "\r\nrepeater:\r\n DS80PCIxxx repeater config & status operations...\r\n \
     repeater set - Auto-config RX EQ & TX DEM for all repeaters\r\n \
     repeater get - Dump RX EQ & TX DEM value for all repeaters\r\n \
-    repeater stauts - Dump status for all repeaters\r\n",
+    repeater status - Dump status for all repeaters\r\n",
     command_callback_repeater,
     1
 };
@@ -43,9 +43,16 @@ int command_callback_repeater( char *command_output, int output_buf_len, const c
     
     // Get prameter 1: set|get|status
     pt_parameter = nightcli_command_get_param( command_string, 1, &param_string_len );
+	
+		// Just show help
+    if( pt_parameter == NULL )
+    {
+        serial_debug.printf( cmd_repeater.command_help_string );
+        ret = -2;
+    }
    
     // Command: repeater set - Auto-config RX EQ & TX DEM for all repeaters
-    if( pt_parameter != NULL && strncmp( pt_parameter, "set", param_string_len) == 0 )
+    if( strncmp( pt_parameter, "set", param_string_len) == 0 )
     {        
         // Init all repeaters discovered on both two I2C buses
         if( ds80_config_set_all( i2c_ms1 ) != 0 )
@@ -90,8 +97,9 @@ int command_callback_repeater( char *command_output, int output_buf_len, const c
     else
     {
         // Incorrect or NULL paratmeter: show help
-        serial_debug.printf( cmd_i2c.command_help_string );
-        ret = -2;
+				serial_debug.printf( "Repeater: invalid parameter(s).\n\r" );
+        serial_debug.printf( cmd_repeater.command_help_string );
+        ret = -10;
     }
     return ret;
 }

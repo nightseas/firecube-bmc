@@ -406,7 +406,8 @@ int command_callback_i2c( char *command_output, int output_buf_len, const char *
     // Incorrect command
     else
     {
-        serial_debug.printf( "I2C: invalid command. Enter 'help' for more information.\n\r\n\r" );
+        serial_debug.printf( "I2C: invalid parameter.\n\r" );
+				serial_debug.printf( cmd_i2c.command_help_string );
         ret = -10;
     }   
 

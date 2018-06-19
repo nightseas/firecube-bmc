@@ -32,21 +32,28 @@ const int BD_CONFIG_LEN = 16;
 /*-----------------------------------------------------------*/
 
 // LEDs on mother board and daughter board
-DigitalOut led_mb1( PA_0 ), led_mb2( PA_1 ), led_mb3( PA_2 ), led_mb4( PA_3 );
+//DigitalOut led_mb1( PA_0 ), led_mb2( PA_1 ), led_mb3( PA_2 ), led_mb4( PA_3 );
+DigitalOut led_mb2( PA_1 ), led_mb3( PA_2 ), led_mb4( PA_3 );
 DigitalOut led_mb5( PB_12 ), led_mb6( PB_13 ), led_mb7( PB_14 ), led_mb8( PB_15 );
+PwmOut led_mb1_pwm( PA_0 );
 
 // USART connect to PC for debug/cli
 Serial serial_debug( PA_9, PA_10 ); // CLI interface on debug header
 
 // I2C master for repeater config
-I2C i2c_ms1( PB_4, PA_8 );
+I2C i2c_ms1( PB_7, PB_6 );
 
 // I2C slave connected to OCuLink remote control channels
-I2CSlave i2c_sl1( PB_7, PB_6 ), i2c_sl2( PB_3, PB_10 );
+I2CSlave i2c_sl1( PB_3, PB_10 ), i2c_sl2( PB_4, PA_8 );
+
+// SPI master for repeater config
+SPI spi_ms1( PA_7, PA_6, PA_5 );
+// SPI HW CS bug: see "STM32 SPI: fix NSS pin configuration #6951"
+DigitalOut spi_ms1_cs (PA_4, 1);
 
 // Misc control signals
 DigitalIn reset_ocl1( PB_2 ), reset_ocl2( PB_5 ), reset_ocl3( PB_8 ), reset_ocl4( PB_9 ); // PCIe reset input from OCuLink
-DigitalIn present_slot1( PB_0 ), present_slot2( PB_1 ); // PCIe present input from PCIe slot
+DigitalIn present_slot1( PB_1 ), present_slot2( PB_0 ); // PCIe present input from PCIe slot
 DigitalIn pgood_3v( PA_15 ); // Power good singal from DC/DC
 
 /*-----------------------------------------------------------*/
@@ -73,15 +80,20 @@ Board_Info_t x411_board_info =
 // Return: 0 - succeeded, non-0 - failed
 int boardlib_init( void )
 {    
-    //LED initial states: all on
-    led_mb1 = 0;
-    led_mb2 = 0;
+    //LED initial states: all on except led_mb2 which indicates 3.3V power good
+		led_mb1_pwm.period_ms(1);
+		led_mb1_pwm.write(0);
+		//led_mb1 = 0;
+    led_mb2 = 1;
     led_mb3 = 0;
     led_mb4 = 0;
     led_mb5 = 0;
     led_mb6 = 0;
     led_mb7 = 0;
     led_mb8 = 0;
+	
+		i2c_sl1.address(0x2D << 1);
+		i2c_sl2.address(0x2E << 1);
     
     // Set pull-down mode for reset from OCL to initialize the states
     reset_ocl1.mode( PullDown );
@@ -98,12 +110,16 @@ int boardlib_init( void )
     // Dump board info 
     boardlib_info_dump();
     
-    serial_debug.printf("Waiting for 3.3V system good...\r\n\r\n");
+    serial_debug.printf("Waiting for 3.3V system good...");
     while(1)
     {
         if( pgood_3v == 1 )
+				{
+						serial_debug.printf("OK!\r\n\r\n");
             break;
-        wait(500);
+				}
+				led_mb2 = !led_mb2;
+        Thread::wait(100);
     }
         
     // Init all repeaters discovered on both two I2C buses
@@ -119,7 +135,8 @@ int boardlib_init( void )
 #endif
 
     //LED states after board lib init: all off    
-    led_mb1 = 1;
+    led_mb1_pwm.write(1);
+		//led_mb1 = 1;
     led_mb2 = 1;
     led_mb3 = 1;
     led_mb4 = 1;

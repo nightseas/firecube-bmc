@@ -32,7 +32,9 @@
 /*-----------------------------------------------------------*/
 
 // LEDs on mother board and daughter board
-extern DigitalOut led_mb1, led_mb2, led_mb3, led_mb4, led_mb5, led_mb6, led_mb7, led_mb8;
+//extern DigitalOut led_mb1, led_mb2, led_mb3, led_mb4, led_mb5, led_mb6, led_mb7, led_mb8;
+extern DigitalOut led_mb2, led_mb3, led_mb4, led_mb5, led_mb6, led_mb7, led_mb8;
+extern PwmOut led_mb1_pwm;
 
 // USART connect to PC for debug/cli
 extern Serial serial_debug; // CLI interface on debug header
@@ -42,6 +44,11 @@ extern I2C i2c_ms1;
 
 // I2C slave connected to OCuLink remote control channels
 extern I2CSlave i2c_slv1, i2c_slv2;
+
+// SPI master for repeater config
+extern SPI spi_ms1;
+// SPI HW CS bug: see "STM32 SPI: fix NSS pin configuration #6951"
+extern DigitalOut spi_ms1_cs;
 
 // Misc control signals
 extern DigitalIn reset_ocl1, reset_ocl2, reset_ocl3, reset_ocl4; // PCIe reset input from OCuLink

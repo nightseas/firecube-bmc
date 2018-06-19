@@ -28,6 +28,7 @@
 extern const CLI_Command_t cmd_sysinfo;
 extern const CLI_Command_t cmd_echo;
 extern const CLI_Command_t cmd_repeater;
+extern const CLI_Command_t cmd_cpld;
 
 /*-----------------------------------------------------------*/
 
@@ -35,6 +36,7 @@ extern const CLI_Command_t cmd_repeater;
 extern int cli_commands_init( void );
 extern int command_callback_sysinfo( char *command_output, int output_buf_len, const char *command_string );
 extern int command_callback_echo( char *command_output, int output_buf_len, const char *command_string );
+extern int command_callback_cpld( char *command_output, int output_buf_len, const char *command_string );
 
 #endif
 
