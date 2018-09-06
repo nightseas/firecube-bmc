@@ -51,9 +51,10 @@ extern SPI spi_ms1;
 extern DigitalOut spi_ms1_cs;
 
 // Misc control signals
-extern DigitalIn reset_ocl1, reset_ocl2, reset_ocl3, reset_ocl4; // PCIe reset input from OCuLink
-extern DigitalIn present_slot1, present_slot2; // PCIe present input from PCIe slot
-extern DigitalIn pgood_3v; // Power good singal from DC/DC
+extern DigitalIn io_cpld0, io_cpld1, io_cpld2, io_cpld3, io_cpld4, io_cpld5, io_cpld6, io_cpld7;
+//extern DigitalIn reset_ocl1, reset_ocl2, reset_ocl3, reset_ocl4; // PCIe reset input from OCuLink
+//extern DigitalIn present_slot1, present_slot2; // PCIe present input from PCIe slot
+//extern DigitalIn pgood_3v; // Power good singal from DC/DC
 
 /*-----------------------------------------------------------*/
 

@@ -31,5 +31,9 @@
 *.out
 *.app
 
+# Project Files
+*uvguix*
+*.dbgconf
+
 # Build folder
 BUILD/*

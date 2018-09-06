@@ -48,7 +48,7 @@ const CLI_Command_t cmd_i2c =
 /*-----------------------------------------------------------*/
 
 int command_callback_i2c( char *command_output, int output_buf_len, const char *command_string )
-{	
+{    
     int param_string_len, ret = 0;
     const char *pt_parameter;        
     char i2c_buf[ I2C_BUFF_SIZE ];
@@ -407,7 +407,7 @@ int command_callback_i2c( char *command_output, int output_buf_len, const char *
     else
     {
         serial_debug.printf( "I2C: invalid parameter.\n\r" );
-				serial_debug.printf( cmd_i2c.command_help_string );
+        serial_debug.printf( cmd_i2c.command_help_string );
         ret = -10;
     }   
 

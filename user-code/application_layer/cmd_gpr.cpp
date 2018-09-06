@@ -47,14 +47,15 @@ int command_callback_rgpr( char *command_output, int output_buf_len, const char 
 
     serial_debug.printf("\n\r\n\r\n\r===============================\n\r=        GPIO Registers       =\n\r===============================\n\r");
     
-    serial_debug.printf(" OCL1_RST#     : %c\n\r", GET_GPR_STATUS(reset_ocl1));
-    serial_debug.printf(" OCL2_RST#     : %c\n\r", GET_GPR_STATUS(reset_ocl2));
-    serial_debug.printf(" OCL1_RST#     : %c\n\r", GET_GPR_STATUS(reset_ocl3));
-    serial_debug.printf(" OCL2_RST#     : %c\n\r", GET_GPR_STATUS(reset_ocl4));
+    serial_debug.printf(" CPLD IO <0>     : %c\n\r", GET_GPR_STATUS(io_cpld0));
+    serial_debug.printf(" CPLD IO <1>     : %c\n\r", GET_GPR_STATUS(io_cpld1));
+    serial_debug.printf(" CPLD IO <2>     : %c\n\r", GET_GPR_STATUS(io_cpld2));
+    serial_debug.printf(" CPLD IO <3>     : %c\n\r", GET_GPR_STATUS(io_cpld3));
+    serial_debug.printf(" CPLD IO <4>     : %c\n\r", GET_GPR_STATUS(io_cpld4));
+    serial_debug.printf(" CPLD IO <5>     : %c\n\r", GET_GPR_STATUS(io_cpld5));
+    serial_debug.printf(" CPLD IO <6>     : %c\n\r", GET_GPR_STATUS(io_cpld6));
+    serial_debug.printf(" CPLD IO <7>     : %c\n\r", GET_GPR_STATUS(io_cpld7));
     
-    serial_debug.printf(" PSLOT1_PRSNT#   : %c\n\r", GET_GPR_STATUS(present_slot1));
-    serial_debug.printf(" PSLOT2_PRSNT#   : %c\n\r", GET_GPR_STATUS(present_slot2));
-        
     serial_debug.printf("\n\r\n\r");
     
     return 0;

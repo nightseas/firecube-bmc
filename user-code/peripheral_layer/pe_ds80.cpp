@@ -68,28 +68,28 @@ const char ds80_default_config[][2] = { { 0x06, 0x18 },   // Enables SMBus Slave
 // DS80PCI800: Both CHA_IN & CHB_IN are from OCulink 
 // TI suggested config for both RC & EP:{ REG, VALUE }
 const char ds80_rx_config[][2] =      { { 0x06, 0x18 },   // Enables SMBus Slave Mode Register Control
-                                        { 0x0F, 0x07 },   // Set CHB_0 EQ to 0x07   (14.3 dB).
+                                        { 0x0F, 0x02 },   // Set CHB_0 EQ to 0x02   (9.9 dB).
                                         { 0x10, 0xAD },   // Set CHB_0 VOD to 101'b (1.2 Vp-p).
                                         { 0x11, 0x00 },   // Set CHB_0 DEM to 000'b (0 dB).
-                                        { 0x16, 0x07 },   // Set CHB_1 EQ to 0x07   (14.3 dB).
+                                        { 0x16, 0x02 },   // Set CHB_1 EQ to 0x02   (9.9 dB).
                                         { 0x17, 0xAD },   // Set CHB_1 VOD to 101'b (1.2 Vp-p).
                                         { 0x18, 0x00 },   // Set CHB_1 DEM to 000'b (0 dB).
-                                        { 0x1D, 0x07 },   // Set CHB_2 EQ to 0x07   (14.3 dB).
+                                        { 0x1D, 0x02 },   // Set CHB_2 EQ to 0x02   (9.9 dB).
                                         { 0x1E, 0xAD },   // Set CHB_2 VOD to 101'b (1.2 Vp-p).
                                         { 0x1F, 0x00 },   // Set CHB_2 DEM to 000'b (0 dB).
-                                        { 0x24, 0x07 },   // Set CHB_3 EQ to 0x07   (14.3 dB).
+                                        { 0x24, 0x02 },   // Set CHB_3 EQ to 0x02   (9.9 dB).
                                         { 0x25, 0xAD },   // Set CHB_3 VOD to 101'b (1.2 Vp-p).
                                         { 0x26, 0x00 },   // Set CHB_3 DEM to 000'b (0 dB).
-                                        { 0x2C, 0x07 },   // Set CHA_0 EQ to 0x07   (14.3 dB).
+                                        { 0x2C, 0x02 },   // Set CHA_0 EQ to 0x02   (9.9 dB).
                                         { 0x2D, 0xAD },   // Set CHA_0 VOD to 101'b (1.2 Vp-p).
                                         { 0x2E, 0x00 },   // Set CHA_0 DEM to 000'b (0 dB).
-                                        { 0x33, 0x07 },   // Set CHA_1 EQ to 0x07   (14.3 dB).
+                                        { 0x33, 0x02 },   // Set CHA_1 EQ to 0x02   (9.9 dB).
                                         { 0x34, 0xAD },   // Set CHA_1 VOD to 101'b (1.2 Vp-p).
                                         { 0x35, 0x00 },   // Set CHA_1 DEM to 000'b (0 dB).
-                                        { 0x3A, 0x07 },   // Set CHA_2 EQ to 0x07   (14.3 dB).
+                                        { 0x3A, 0x02 },   // Set CHA_2 EQ to 0x02   (9.9 dB).
                                         { 0x3B, 0xAD },   // Set CHA_2 VOD to 101'b (1.2 Vp-p).
                                         { 0x3C, 0x00 },   // Set CHA_2 DEM to 000'b (0 dB).
-                                        { 0x41, 0x07 },   // Set CHA_3 EQ to 0x07   (14.3 dB).
+                                        { 0x41, 0x02 },   // Set CHA_3 EQ to 0x02   (9.9 dB).
                                         { 0x42, 0xAD },   // Set CHA_3 VOD to 101'b (1.2 Vp-p).
                                         { 0x43, 0x00 }    // Set CHA_3 DEM to 000'b (0 dB)
 };
@@ -108,7 +108,7 @@ const float ds80_eq_db_4ghz_table[] = {  4.9,  7.9,  9.9, 11.0, 14.3, 14.6, 17.0
 
 int ds80_config_set_all( I2C &i2c_bus )
 {
-    int ds80_i2c_devs[8];
+    int ds80_i2c_devs[32];
     int dev_num;
     char config = 'd';
     
@@ -146,7 +146,7 @@ int ds80_config_set_all( I2C &i2c_bus )
 
 int ds80_config_dump_all( I2C &i2c_bus )
 {
-    int ds80_i2c_devs[8];
+    int ds80_i2c_devs[32];
     int dev_num;
     
     memset( ds80_i2c_devs, 0, 8);
@@ -171,7 +171,7 @@ int ds80_config_dump_all( I2C &i2c_bus )
 
 int ds80_status_dump_all( I2C &i2c_bus )
 {
-    int ds80_i2c_devs[8];
+    int ds80_i2c_devs[32];
     int dev_num;
     
     memset( ds80_i2c_devs, 0, 8);
@@ -297,10 +297,10 @@ int ds80_dump_eq_dem( I2C &i2c_bus, int dev_id )
     }
   
     // Analyze configs.
-		
-		// Device Info
-		serial_debug.printf( "\n\rDev Addr: 0x%02X  %s\n\r", dev_id,  (dev_id % 2) ? "RC --> EP" : "EP --> RC" );
-    serial_debug.printf( "----------------------------------\n\r" );
+    
+    // Device Info
+    //serial_debug.printf( "\n\rDev Addr: 0x%02X  %s\n\r", dev_id,  (dev_id % 2) ? "RC --> EP" : "EP --> RC" );
+    //serial_debug.printf( "----------------------------------\n\r" );
     // Column head
     serial_debug.printf( "CH      DEM      VOD      EQ@4GHz\n\r" );
     serial_debug.printf( "----------------------------------\n\r" );
@@ -376,15 +376,15 @@ int ds80_dump_status( I2C &i2c_bus, int dev_id )
         return -2;   
     }
     sd_th = i2c_buf[0];
-		//serial_debug.printf( "DS80 I2C: SD_TH = 0x%02X.\n\r\n\r", sd_th );
+    //serial_debug.printf( "DS80 I2C: SD_TH = 0x%02X.\n\r\n\r", sd_th );
     
     // Read SD_TH. all EQ, VOD and DEM configs.
     for ( int i=0; i<8; i++ )
     {
-				if( i < 4 )
-					i2c_buf[0] = i * 7 + DS80_REG_RX_CHB0;
-				else
-					i2c_buf[0] = i * 7 + 1 + DS80_REG_RX_CHB0;
+        if( i < 4 )
+            i2c_buf[0] = i * 7 + DS80_REG_RX_CHB0;
+        else
+            i2c_buf[0] = i * 7 + 1 + DS80_REG_RX_CHB0;
         if( i2c_bus.write( dev_id << 1, i2c_buf, 1 ) != 0 )
         {
             serial_debug.printf( "DS80 I2C: write to device 0x%02X failed!\n\r\n\r", dev_id );
@@ -396,15 +396,15 @@ int ds80_dump_status( I2C &i2c_bus, int dev_id )
             return -4;   
         }
         status_buf[i] = i2c_buf[0];
-				//serial_debug.printf( "DS80 I2C: STATUS<%d> = 0x%02X.\n\r\n\r", i, status_buf[i] );
+        //serial_debug.printf( "DS80 I2C: STATUS<%d> = 0x%02X.\n\r\n\r", i, status_buf[i] );
     }
 
     
     // Analyze status.
     
-		// Device Info
-		serial_debug.printf( "\n\rDev Addr: 0x%02X  %s\n\r", dev_id,  (dev_id % 2) ? "RC --> EP" : "EP --> RC" );
-    serial_debug.printf( "----------------------------------\n\r" );
+    // Device Info
+    //serial_debug.printf( "\n\rDev Addr: 0x%02X  %s\n\r", dev_id,  (dev_id % 2) ? "RC --> EP" : "EP --> RC" );
+    //serial_debug.printf( "----------------------------------\n\r" );
     // Column head
     serial_debug.printf( "CH     SDTH     RXDET     RATE\n\r" );
     serial_debug.printf( "--------------------------------\n\r" );

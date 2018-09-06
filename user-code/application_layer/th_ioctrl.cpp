@@ -34,18 +34,18 @@ void thread_callback_ioctrl( void )
     while( 1 )
     {      
         // Update reset status to debug LEDs
-        // LED ON: pgood is asserted
-        led_mb2 = !pgood_3v;
-        
-        // LED ON: present is asserted
-        led_mb3 = present_slot1;
-        led_mb4 = present_slot2;
-        
-        // LED ON: reset is de-asserted
-        led_mb6 = !reset_ocl1;
-        led_mb5 = !reset_ocl2;
-        led_mb8 = !reset_ocl3;
-        led_mb7 = !reset_ocl4;
+//        // LED ON: pgood is asserted
+//        led_mb2 = !pgood_3v;
+//        
+//        // LED ON: present is asserted
+//        led_mb3 = present_slot1;
+//        led_mb4 = present_slot2;
+//        
+//        // LED ON: reset is de-asserted
+//        led_mb6 = !reset_ocl1;
+//        led_mb5 = !reset_ocl2;
+//        led_mb8 = !reset_ocl3;
+//        led_mb7 = !reset_ocl4;
       
         // Poll input status every 10ms
         Thread::wait( 10 );

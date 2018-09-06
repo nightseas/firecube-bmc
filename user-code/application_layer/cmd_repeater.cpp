@@ -43,8 +43,8 @@ int command_callback_repeater( char *command_output, int output_buf_len, const c
     
     // Get prameter 1: set|get|status
     pt_parameter = nightcli_command_get_param( command_string, 1, &param_string_len );
-	
-		// Just show help
+    
+        // Just show help
     if( pt_parameter == NULL )
     {
         serial_debug.printf( cmd_repeater.command_help_string );
@@ -97,7 +97,7 @@ int command_callback_repeater( char *command_output, int output_buf_len, const c
     else
     {
         // Incorrect or NULL paratmeter: show help
-				serial_debug.printf( "Repeater: invalid parameter(s).\n\r" );
+        serial_debug.printf( "Repeater: invalid parameter(s).\n\r" );
         serial_debug.printf( cmd_repeater.command_help_string );
         ret = -10;
     }
