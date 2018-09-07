@@ -8,7 +8,7 @@
   <Extensions>
     <cExt>*.c</cExt>
     <aExt>*.s*; *.src; *.a*</aExt>
-    <oExt>*.obj</oExt>
+    <oExt>*.obj; *.o</oExt>
     <lExt>*.lib</lExt>
     <tExt>*.txt; *.h; *.inc</tExt>
     <pExt>*.plm</pExt>
@@ -16810,8 +16810,8 @@
   </Group>
 
   <Group>
-    <GroupName>application-layer</GroupName>
-    <tvExp>1</tvExp>
+    <GroupName>pe-drivers</GroupName>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -16822,8 +16822,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\cmd_common.cpp</PathWithFileName>
-      <FilenameWithoutPath>cmd_common.cpp</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\pe-drivers\pe_ds80.cpp</PathWithFileName>
+      <FilenameWithoutPath>pe_ds80.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -16834,8 +16834,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\cmd_common.h</PathWithFileName>
-      <FilenameWithoutPath>cmd_common.h</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\pe-drivers\pe_ds80.h</PathWithFileName>
+      <FilenameWithoutPath>pe_ds80.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -16846,8 +16846,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\cmd_gpr.cpp</PathWithFileName>
-      <FilenameWithoutPath>cmd_gpr.cpp</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\pe-drivers\pe_f4_uuid.cpp</PathWithFileName>
+      <FilenameWithoutPath>pe_f4_uuid.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -16858,8 +16858,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\cmd_gpr.h</PathWithFileName>
-      <FilenameWithoutPath>cmd_gpr.h</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\pe-drivers\pe_f4_uuid.h</PathWithFileName>
+      <FilenameWithoutPath>pe_f4_uuid.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -16870,8 +16870,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\cmd_i2c.cpp</PathWithFileName>
-      <FilenameWithoutPath>cmd_i2c.cpp</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\pe-drivers\pe_i2c_debug.cpp</PathWithFileName>
+      <FilenameWithoutPath>pe_i2c_debug.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -16882,8 +16882,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\cmd_i2c.h</PathWithFileName>
-      <FilenameWithoutPath>cmd_i2c.h</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\pe-drivers\pe_i2c_debug.h</PathWithFileName>
+      <FilenameWithoutPath>pe_i2c_debug.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -16894,8 +16894,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\cmd_repeater.cpp</PathWithFileName>
-      <FilenameWithoutPath>cmd_repeater.cpp</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\pe-drivers\pe_pcie_evb_lib.cpp</PathWithFileName>
+      <FilenameWithoutPath>pe_pcie_evb_lib.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
@@ -16906,115 +16906,87 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\cmd_repeater.h</PathWithFileName>
-      <FilenameWithoutPath>cmd_repeater.h</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\pe-drivers\pe_pcie_evb_lib.h</PathWithFileName>
+      <FilenameWithoutPath>pe_pcie_evb_lib.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+  </Group>
+
+  <Group>
+    <GroupName>threads</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>3</GroupNumber>
+      <GroupNumber>4</GroupNumber>
       <FileNumber>1393</FileNumber>
-      <FileType>5</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\nightcli.h</PathWithFileName>
-      <FilenameWithoutPath>nightcli.h</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>1394</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\nightcli_command.cpp</PathWithFileName>
-      <FilenameWithoutPath>nightcli_command.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>1395</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\nightcli_console.cpp</PathWithFileName>
-      <FilenameWithoutPath>nightcli_console.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>1396</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\th_cli.cpp</PathWithFileName>
+      <PathWithFileName>.\user-code\threads\th_cli.cpp</PathWithFileName>
       <FilenameWithoutPath>th_cli.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>1397</FileNumber>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>1394</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\th_cli.h</PathWithFileName>
+      <PathWithFileName>.\user-code\threads\th_cli.h</PathWithFileName>
       <FilenameWithoutPath>th_cli.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>1398</FileNumber>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>1395</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\th_common.cpp</PathWithFileName>
+      <PathWithFileName>.\user-code\threads\th_common.cpp</PathWithFileName>
       <FilenameWithoutPath>th_common.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>1399</FileNumber>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>1396</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\th_common.h</PathWithFileName>
+      <PathWithFileName>.\user-code\threads\th_common.h</PathWithFileName>
       <FilenameWithoutPath>th_common.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>1400</FileNumber>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>1397</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\th_ioctrl.cpp</PathWithFileName>
+      <PathWithFileName>.\user-code\threads\th_ioctrl.cpp</PathWithFileName>
       <FilenameWithoutPath>th_ioctrl.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>3</GroupNumber>
-      <FileNumber>1401</FileNumber>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>1398</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\application_layer\th_ioctrl.h</PathWithFileName>
+      <PathWithFileName>.\user-code\threads\th_ioctrl.h</PathWithFileName>
       <FilenameWithoutPath>th_ioctrl.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -17022,104 +16994,164 @@
   </Group>
 
   <Group>
-    <GroupName>peripheral-layer</GroupName>
-    <tvExp>1</tvExp>
+    <GroupName>cli-commands</GroupName>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>1399</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\user-code\cli-commands\cmd_common.cpp</PathWithFileName>
+      <FilenameWithoutPath>cmd_common.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>1400</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\user-code\cli-commands\cmd_common.h</PathWithFileName>
+      <FilenameWithoutPath>cmd_common.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>1401</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\user-code\cli-commands\cmd_gpr.cpp</PathWithFileName>
+      <FilenameWithoutPath>cmd_gpr.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>1402</FileNumber>
-      <FileType>8</FileType>
+      <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\peripheral_layer\pe_ds80.cpp</PathWithFileName>
-      <FilenameWithoutPath>pe_ds80.cpp</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\cli-commands\cmd_gpr.h</PathWithFileName>
+      <FilenameWithoutPath>cmd_gpr.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>1403</FileNumber>
-      <FileType>5</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\peripheral_layer\pe_ds80.h</PathWithFileName>
-      <FilenameWithoutPath>pe_ds80.h</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\cli-commands\cmd_i2c.cpp</PathWithFileName>
+      <FilenameWithoutPath>cmd_i2c.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>1404</FileNumber>
-      <FileType>8</FileType>
+      <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\peripheral_layer\pe_f4_uuid.cpp</PathWithFileName>
-      <FilenameWithoutPath>pe_f4_uuid.cpp</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\cli-commands\cmd_i2c.h</PathWithFileName>
+      <FilenameWithoutPath>cmd_i2c.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>1405</FileNumber>
-      <FileType>5</FileType>
+      <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\peripheral_layer\pe_f4_uuid.h</PathWithFileName>
-      <FilenameWithoutPath>pe_f4_uuid.h</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\cli-commands\cmd_ioh.cpp</PathWithFileName>
+      <FilenameWithoutPath>cmd_ioh.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>1406</FileNumber>
-      <FileType>8</FileType>
-      <tvExp>0</tvExp>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\peripheral_layer\pe_i2c_debug.cpp</PathWithFileName>
-      <FilenameWithoutPath>pe_i2c_debug.cpp</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>4</GroupNumber>
-      <FileNumber>1407</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\peripheral_layer\pe_i2c_debug.h</PathWithFileName>
-      <FilenameWithoutPath>pe_i2c_debug.h</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\cli-commands\cmd_ioh.h</PathWithFileName>
+      <FilenameWithoutPath>cmd_ioh.h</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>4</GroupNumber>
-      <FileNumber>1408</FileNumber>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>1407</FileNumber>
       <FileType>8</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\peripheral_layer\pe_pcie_evb_lib.cpp</PathWithFileName>
-      <FilenameWithoutPath>pe_pcie_evb_lib.cpp</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\cli-commands\cmd_repeater.cpp</PathWithFileName>
+      <FilenameWithoutPath>cmd_repeater.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
     <File>
-      <GroupNumber>4</GroupNumber>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>1408</FileNumber>
+      <FileType>5</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\user-code\cli-commands\cmd_repeater.h</PathWithFileName>
+      <FilenameWithoutPath>cmd_repeater.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
       <FileNumber>1409</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\user-code\peripheral_layer\pe_pcie_evb_lib.h</PathWithFileName>
-      <FilenameWithoutPath>pe_pcie_evb_lib.h</FilenameWithoutPath>
+      <PathWithFileName>.\user-code\cli-commands\nightcli.h</PathWithFileName>
+      <FilenameWithoutPath>nightcli.h</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>1410</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\user-code\cli-commands\nightcli_command.cpp</PathWithFileName>
+      <FilenameWithoutPath>nightcli_command.cpp</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>5</GroupNumber>
+      <FileNumber>1411</FileNumber>
+      <FileType>8</FileType>
+      <tvExp>0</tvExp>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\user-code\cli-commands\nightcli_console.cpp</PathWithFileName>
+      <FilenameWithoutPath>nightcli_console.cpp</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

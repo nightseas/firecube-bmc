@@ -44,6 +44,7 @@
 #include "cmd_i2c.h"
 #include "cmd_repeater.h"
 #include "cmd_gpr.h"
+#include "cmd_ioh.h"
 
 /*-----------------------------------------------------------*/
 
