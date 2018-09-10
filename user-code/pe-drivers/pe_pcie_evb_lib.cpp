@@ -29,6 +29,17 @@ const int BD_SN_LEN = 16;
 // Board configuration buffer size
 const int BD_CONFIG_LEN = 16;
 
+// RX ring buffer size: might need to increace the size for higher baudrate
+const int SERIAL_RX_BUFF_LEN = 127;
+
+// Ring buffer for serial RX data - used by rx interrupt routines
+char serial_rx_buffer[SERIAL_RX_BUFF_LEN+1];
+// Ring buffer pointers
+// volatile makes read-modify-write atomic 
+volatile int serial_rx_in_inx=0;
+volatile int serial_rx_out_inx=0;
+
+
 #define I2C_SW_ADDR        0x70
 
 /*-----------------------------------------------------------*/
@@ -39,7 +50,7 @@ DigitalOut led_mb2( PA_1 ), led_mb3( PA_2 ), led_mb4( PA_3 );
 PwmOut led_mb1_pwm( PA_0 );
 
 // USART connect to PC for debug/cli
-Serial serial_debug( PA_9, PA_10 ); // CLI interface on debug header
+RawSerial serial_debug( PA_9, PA_10, 115200 ); // CLI interface on debug header
 
 // I2C master for repeater config
 I2C i2c_ms1( PB_4, PA_8 );
@@ -97,8 +108,8 @@ int boardlib_init( void )
     i2c_sl1.address(0x2D << 1);
     i2c_sl2.address(0x2E << 1);
     
-    // Set PC debug/cli serial port to 115200,8,n,1
-    serial_debug.baud( 115200 );
+    // Setup serial RX interrupt
+    serial_debug.attach(&serial_rx_isr_handler, RawSerial::RxIrq);
     
     // Update serail number from MCU UUID
     uuid_to_sn( x411_serial_number );
@@ -106,7 +117,18 @@ int boardlib_init( void )
     // Dump board info 
     boardlib_info_dump();
         
-    wait_ms(500);
+    serial_debug.printf("Waiting for system good...");
+    while(1)
+    {
+        // IO Hub GPIO<1>: System Power Good.
+        if( io_cpld1 == 1 )
+        {
+            serial_debug.printf("OK!\r\n\r\n");
+            break;
+        }
+        led_mb2 = !led_mb2;
+        Thread::wait(100);
+    }
     
     // Init all repeaters discovered on both two I2C buses
     if( ds80_config_set_all( i2c_ms1 ) != 0 || ds80_config_dump_all( i2c_ms1 ) != 0 )
@@ -153,3 +175,19 @@ void boardlib_info_dump( void )
     serial_debug.printf( "\n\r\n\r" );
 }
 
+/*-----------------------------------------------------------*/
+
+// Interupt handler: read data from serial port and write to ring buffer
+// The application will poll the ring buffer, fetch & process data later when available
+void serial_rx_isr_handler( void )
+{
+    led_mb4 = !led_mb4;
+    // In case there're more then 1 byte in UART HW buffer
+    // Stop when buffer is full (and drop the bytes out of processing capacity)
+    while( serial_debug.readable() && ( (serial_rx_in_inx + 1) % SERIAL_RX_BUFF_LEN != serial_rx_out_inx ) )
+    {
+        serial_rx_buffer[serial_rx_in_inx] = serial_debug.getc();        
+        serial_rx_in_inx = ( serial_rx_in_inx + 1 ) % SERIAL_RX_BUFF_LEN;
+    }
+    return;
+}

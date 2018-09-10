@@ -37,7 +37,7 @@ extern DigitalOut led_mb2, led_mb3, led_mb4, led_mb5, led_mb6, led_mb7, led_mb8;
 extern PwmOut led_mb1_pwm;
 
 // USART connect to PC for debug/cli
-extern Serial serial_debug; // CLI interface on debug header
+extern RawSerial serial_debug; // CLI interface on debug header
 
 // I2C master for repeater config
 extern I2C i2c_ms1;
@@ -79,5 +79,23 @@ typedef struct SENSOR_EVENT_TYPE
 //Board lib functions
 extern int boardlib_init( void );
 extern void boardlib_info_dump( void );
+
+/*-----------------------------------------------------------*/
+
+// Interupt handler: read data from serial port and write to ring buffer
+// The application will poll the ring buffer, fetch & process data later when available
+extern void serial_rx_isr_handler( void );
+
+// RX ring buffer size: might need to increace the size for higher baudrate
+extern const int SERIAL_RX_BUFF_LEN;
+
+// Ring buffer for serial RX data - used by rx interrupt routines
+extern char serial_rx_buffer[];
+// Ring buffer pointers
+// volatile makes read-modify-write atomic 
+extern volatile int serial_rx_in_inx;
+extern volatile int serial_rx_out_inx;
+
+/*-----------------------------------------------------------*/
 
 #endif

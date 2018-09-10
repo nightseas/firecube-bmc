@@ -152,7 +152,7 @@ static void _hist_init( void )
 /*-----------------------------------------------------------*/
 
 // This is a endless loop to catch input of console and process it
-int nightcli_console_loop( Serial &console )
+int nightcli_console_loop( RawSerial &console )
 {
     char console_input_char;
     unsigned int esc_seq_len;
@@ -191,13 +191,27 @@ int nightcli_console_loop( Serial &console )
         // Console reading & echoing loop
         while( ! flag_exit_reading_loop )
         {
-            // Read a char from console when available            
-            #if 0 // mbed OS 5.4: console.readable() causes USART hang while receiving large number of data! DO NOT use it.
+            // Read a char from console when available, polling mode          
+            #if 0
             while( !console.readable() )
                 Thread::yield(); // Allow other threads to run  
-            #endif     
-            
+                       
             console_input_char = console.getc(); 
+            #endif   
+            
+            console_input_char = 0;
+            
+            // Read from serial RX ring buffer
+            // Stop if buffer is empty
+            while( serial_rx_in_inx == serial_rx_out_inx )
+            {
+                Thread::yield();
+            }
+
+            console_input_char = serial_rx_buffer[serial_rx_out_inx];
+            serial_rx_out_inx = (serial_rx_out_inx + 1) % SERIAL_RX_BUFF_LEN;
+
+            
             
             // Enter detected: exit reading loop and start to handle this line of command string
             if( console_input_char == '\n' || console_input_char == '\r' )

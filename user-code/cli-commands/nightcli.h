@@ -61,7 +61,7 @@ typedef struct CLI_COMMAND_TYPE
 
 /*-----------------------------------------------------------*/
 
-extern int nightcli_console_loop( Serial &console );
+extern int nightcli_console_loop( RawSerial &console );
 extern int nightcli_command_register( const CLI_Command_t * const command );
 extern int nightcli_command_process( const char * const command_input, char * command_output, unsigned int output_buf_len  );
 extern char *nightcli_command_get_outbuf( void );
