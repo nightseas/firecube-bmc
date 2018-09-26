@@ -23,9 +23,21 @@
 #define _SYS_CONFIG_
 
 // System Includings
+
+// mbed & RTOS lib
 #include "mbed.h"
 #include "rtos.h"
+
+// mbed TLS lib for crypto & hash
 #include "mbedtls/md.h"
+
+// Files system lib
+#include "SPIFBlockDevice.h"
+#include "HeapBlockDevice.h"
+#include "BlockDevice.h"
+#include "LittleFileSystem.h"
+
+// Standard C lib
 #include <string.h>
 #include <stdint.h>
 
@@ -45,6 +57,7 @@
 #include "cmd_repeater.h"
 #include "cmd_gpr.h"
 #include "cmd_ioh.h"
+#include "cmd_nvs.h"
 
 /*-----------------------------------------------------------*/
 
@@ -56,5 +69,17 @@
 #include "pe_ds80.h"
 // STM32F4 UUID Peripheral Lib
 #include "pe_f4_uuid.h"
+// NV Storage File System Peripheral Lib
+#include "pe_nvs.h"
+
+/*-----------------------------------------------------------*/
+
+// Enable NV storage simulation with heap block device
+#define NVS_HEAP_SIM        0
+
+// Enable CPU statistics
+// TODO: DO NOT enable it on FPGA-DevKit since the function relys on RTC/LSE
+// No LSE is implemented on FPGA-DevKit HW, so the neither CPU usage nor RTC function will work
+#define CPU_STAT_LSE        0
 
 #endif

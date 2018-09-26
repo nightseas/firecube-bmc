@@ -1,5 +1,5 @@
 /*
- *  PCIe Rpeater EVB Board Lib
+ *  PCIe Rpeater EVB Fru Lib
  *
  *  Copyright (C) 2017, Xiaohai Li (haixiaolee@gmail.com), All Rights Reserved
  *  This program is lincensed under Apache-2.0/GPLv3 dual-license
@@ -59,13 +59,17 @@ extern DigitalIn io_cpld0, io_cpld1, io_cpld2, io_cpld3, io_cpld4, io_cpld5, io_
 /*-----------------------------------------------------------*/
 
 // Type definition of board information
-typedef struct BOARD_INFO_TYPE
+typedef struct FRU_INFO_TYPE
 {
     const char * const board_name;
     const char * const vendor_name;
+    const char * const board_version;
+    const char * const firmware_name;
+    const char * const firmware_author;
+    const char * const firmware_version;
     unsigned char * serial_number;
     unsigned char * config;
-} Board_Info_t;
+} FRU_Info_t;
 
 typedef struct SENSOR_EVENT_TYPE
 {
@@ -76,15 +80,27 @@ typedef struct SENSOR_EVENT_TYPE
 
 /*-----------------------------------------------------------*/
 
-//Board lib functions
+//Fru lib functions
 extern int boardlib_init( void );
 extern void boardlib_info_dump( void );
+
+// Update cpu usage to public val
+extern void sys_cpu_usage_update( void );
+// Dump CPU & OS information to debug interface
+extern void sys_cpu_info_dump( void );
 
 /*-----------------------------------------------------------*/
 
 // Interupt handler: read data from serial port and write to ring buffer
 // The application will poll the ring buffer, fetch & process data later when available
 extern void serial_rx_isr_handler( void );
+
+// CPU statistics sample period, the CPU usage during this period will be recorded
+extern const int CPU_USAGE_SAMPLE_TIME; // unit: ms
+
+// CPU statistics val
+extern float sys_cpu_usage;
+extern int id_cpu_stats_queue;
 
 // RX ring buffer size: might need to increace the size for higher baudrate
 extern const int SERIAL_RX_BUFF_LEN;

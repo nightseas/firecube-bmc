@@ -23,11 +23,19 @@
 
 /*-----------------------------------------------------------*/
 
-const CLI_Command_t cmd_sysinfo =
+const CLI_Command_t cmd_fru =
 {
-    "sysinfo",
-    "\r\nsysinfo:\r\n Show system information.\r\n",
-    command_callback_sysinfo,
+    "fru",
+    "\r\nfru:\r\n Show system information.\r\n",
+    command_callback_fru,
+    0
+};
+
+const CLI_Command_t cmd_cpu =
+{
+    "cpu",
+    "\r\ncpu:\r\n Show cpu information and statistics.\r\n",
+    command_callback_cpu,
     0
 };
 
@@ -46,23 +54,42 @@ const CLI_Command_t cmd_echo =
 int cli_commands_init( void )
 {
     int ret = 0;
-    ret += nightcli_command_register( &cmd_sysinfo );
+    ret += nightcli_command_register( &cmd_fru );
+    ret += nightcli_command_register( &cmd_cpu );
     ret += nightcli_command_register( &cmd_echo );
     ret += nightcli_command_register( &cmd_i2c );
     ret += nightcli_command_register( &cmd_repeater );
     ret += nightcli_command_register( &cmd_rgpr );
     ret += nightcli_command_register( &cmd_ioh );
+    ret += nightcli_command_register( &cmd_nvs );
     return ret;
 }
 
 /*-----------------------------------------------------------*/
 
-int command_callback_sysinfo( char *command_output, int output_buf_len, const char *command_string )
+int command_callback_fru( char *command_output, int output_buf_len, const char *command_string )
 {
-    // You can either print info inside the function
     boardlib_info_dump();
-    // Or fill the info into output buffer
-    sprintf(command_output, " System core clock frequency = %d Hz.\n\r\n\r", SystemCoreClock);
+    return 0;
+}
+
+/*-----------------------------------------------------------*/
+
+int command_callback_cpu( char *command_output, int output_buf_len, const char *command_string )
+{
+    sys_cpu_info_dump();
+    serial_debug.printf(" CPU core clock frequency = %d Hz.\n\r\n\r", SystemCoreClock);
+    serial_debug.printf(" CPU Usage: [");
+    for (int ucnt = 0; ucnt < (int)sys_cpu_usage / 5; ucnt++)
+    {
+        serial_debug.printf("|");
+    }
+    for (int ucnt = 0; ucnt < (20 - (int)sys_cpu_usage / 5); ucnt++)
+    {
+        serial_debug.printf(" ");
+    }
+    serial_debug.printf("] %.01f %%\n\r\n\r", sys_cpu_usage);
+    
     return 0;
 }
 

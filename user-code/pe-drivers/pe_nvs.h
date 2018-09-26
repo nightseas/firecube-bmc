@@ -1,5 +1,5 @@
 /*
- *  Common Night CLI Commands
+ *  NV Storage File System Peripheral Lib
  *
  *  Copyright (C) 2017, Xiaohai Li (haixiaolee@gmail.com), All Rights Reserved
  *  This program is lincensed under Apache-2.0/GPLv3 dual-license
@@ -18,24 +18,27 @@
  *  http://www.gnu.org/licenses
  *
  */
- 
-#ifndef _APP_CMD_COMMON_
-#define _APP_CMD_COMMON_
+
+#ifndef _PE_LFS_
+#define _PE_LFS_
 
 /*-----------------------------------------------------------*/
 
-//common command structures
-extern const CLI_Command_t cmd_fru;
-extern const CLI_Command_t cmd_cpu;
-extern const CLI_Command_t cmd_echo;
+// Default NVS filesystem with LittleFS
+extern LittleFileSystem nvs_fs;
+
+// Indicate if NVS filesystem is unformatted (e.g. a blank flash) or corrupt
+extern int nvs_fs_corrupt_flag;  
+
+// Indicate if NVS filesystem is good to use
+extern int nvs_fs_failure; 
 
 /*-----------------------------------------------------------*/
 
-//common command functions
-extern int cli_commands_init( void );
-extern int command_callback_fru( char *command_output, int output_buf_len, const char *command_string );
-extern int command_callback_cpu( char *command_output, int output_buf_len, const char *command_string );
-extern int command_callback_echo( char *command_output, int output_buf_len, const char *command_string );
+// Initialize NVS file system with block device and LittleFS
+extern int nvs_init( void );
+
+// Dump NVS file system statistics
+extern int nvs_usage_dump( void );
 
 #endif
-

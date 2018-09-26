@@ -23,11 +23,42 @@
 
 /*-----------------------------------------------------------*/
 
+// Definition check for mbed-os CPU and system statistics features.
+
+// CPU statistics can't be used on FPGA-DEV-KIT platform due to no LSE available
+//#if !defined(MBED_CPU_STATS_ENABLED) || !defined(DEVICE_LPTICKER) || !defined(DEVICE_SLEEP)
+//#error [NOT_SUPPORTED] CPU statistics not supported
+//#endif
+
+#if !defined(MBED_SYS_STATS_ENABLED)
+#error [NOT_SUPPORTED] mbed system statistics not supported
+#endif
+
+// TODO: This definition should be moved to I2C function codes!!!!
+// 7-bit I2C address of I2C swtich
+#define I2C_SW_ADDR             0x70
+
+/*-----------------------------------------------------------*/
+
 // Board serial number buffer size
 const int BD_SN_LEN = 16;
 
 // Board configuration buffer size
 const int BD_CONFIG_LEN = 16;
+
+// CPU statistics sample period, the CPU usage during this period will be recorded
+const int CPU_USAGE_SAMPLE_TIME = 2000; // unit: ms
+
+// CPU ID & information list
+const int cpu_code_list[] = {0xC20, 0xC60, 0xC23, 0xC24, 0xC27, 0xD20, 0xD21};
+const char cpu_part_list[][11] = { "Cortex-M0 ", "Cortex-M0+", "Cortex-M3 ", "Cortex-M4 ", "Cortex-M7 ", "Cortex-M23", "Cortex-M33", "UNKNOWN   " };
+
+// CPU statistics val
+float sys_cpu_usage = 0;
+static uint64_t sys_prev_idle_time = 0;
+int id_cpu_stats_queue = 0;
+
+EventQueue *sys_cpu_stats_queue;
 
 // RX ring buffer size: might need to increace the size for higher baudrate
 const int SERIAL_RX_BUFF_LEN = 127;
@@ -38,9 +69,6 @@ char serial_rx_buffer[SERIAL_RX_BUFF_LEN+1];
 // volatile makes read-modify-write atomic 
 volatile int serial_rx_in_inx=0;
 volatile int serial_rx_out_inx=0;
-
-
-#define I2C_SW_ADDR        0x70
 
 /*-----------------------------------------------------------*/
 
@@ -69,6 +97,11 @@ DigitalIn io_cpld0(PB_0), io_cpld1(PB_1), io_cpld2(PB_2), io_cpld3(PA_4), io_cpl
 //DigitalIn present_slot1( PB_1 ), present_slot2( PB_0 ); // PCIe present input from PCIe slot
 //DigitalIn pgood_3v(  ); // Power good singal from DC/DC
 
+// On board NVS block device (SPI Flash)
+#if (NVS_HEAP_SIM == 0)
+SPIFBlockDevice nvs_bd(PB_15, PB_14, PB_13, PB_12);
+#endif
+
 /*-----------------------------------------------------------*/
 
 // Board serail number buffer
@@ -79,10 +112,14 @@ unsigned char x411_serial_number[] = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 unsigned char x411_config[] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, \
                                 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 // Board information struct
-Board_Info_t x411_board_info =
+FRU_Info_t x411_board_info =
 {
     "FPGA-DEV-KIT",
-    "N/A (haixiaolee@gmail.com)",
+    "N/A",
+    "V01",
+    "Firecube-BMC",
+    "Xiaohai Li",
+    "V01",
     x411_serial_number,
     x411_config
 };
@@ -116,9 +153,21 @@ int boardlib_init( void )
     
     // Dump board info 
     boardlib_info_dump();
+
+    if( nvs_init() )
+    {
+        serial_debug.printf("NVS init failed! Disable NVS function...\n\r");
+        nvs_fs_failure = 1;
+    }
+
+    if( !nvs_fs_failure )
+    {
+        nvs_usage_dump();
+    }
         
     serial_debug.printf("Waiting for system good...");
-    while(1)
+    int pcnt = 20;
+    while(pcnt--)
     {
         // IO Hub GPIO<1>: System Power Good.
         if( io_cpld1 == 1 )
@@ -131,7 +180,7 @@ int boardlib_init( void )
     }
     
     // Init all repeaters discovered on both two I2C buses
-    if( ds80_config_set_all( i2c_ms1 ) != 0 || ds80_config_dump_all( i2c_ms1 ) != 0 )
+    if( ds80_config_set_all( i2c_ms1 ) != 0 )//|| ds80_config_dump_all( i2c_ms1 ) != 0 )
     {
         serial_debug.printf("No repeater found on bus 1.\r\n\r\n");
     }
@@ -140,7 +189,10 @@ int boardlib_init( void )
     {
         serial_debug.printf("No repeater found on bus 2.\r\n\r\n");
     }
-#endif
+#endif    
+        
+    sys_cpu_stats_queue = mbed_event_queue();
+    id_cpu_stats_queue = sys_cpu_stats_queue->call_every(CPU_USAGE_SAMPLE_TIME, sys_cpu_usage_update);
 
     //LED states after board lib init: all off    
     led_mb1_pwm.write(1);
@@ -160,11 +212,16 @@ void boardlib_info_dump( void )
 {
     int i;
     
-    serial_debug.printf( "\n\r\n\r\n\r===============================\n\r=      Board Information      =\n\r===============================\n\r" );    
-    serial_debug.printf( " Board  Name: %s\n\r", x411_board_info.board_name );
-    serial_debug.printf( " Vendor Name: %s\n\r", x411_board_info.vendor_name );
+    serial_debug.printf( "\n\r\n\r===============================\n\r=      FRU Information      =\n\r===============================\n\r" );    
+    serial_debug.printf( " Board    Name: %s\n\r", x411_board_info.board_name );
+    serial_debug.printf( " Vendor   Name: %s\n\r", x411_board_info.vendor_name );
+    serial_debug.printf( " Board    Ver : %s\n\r\n\r", x411_board_info.board_version );
     
-    serial_debug.printf( " Serial Num : " );
+    serial_debug.printf( " Firmware Name: %s\n\r", x411_board_info.firmware_name );
+    serial_debug.printf( " Firmware Auth: %s\n\r", x411_board_info.firmware_author );
+    serial_debug.printf( " Firmware Ver : %s\n\r\n\r", x411_board_info.firmware_version );
+    
+    serial_debug.printf( " Serial   Num : " );
     for( i = 0; i < BD_SN_LEN; i++ )
         serial_debug.printf( "%02X", x411_board_info.serial_number[i] );    
     serial_debug.printf( "\n\r\n\r" );
@@ -173,6 +230,80 @@ void boardlib_info_dump( void )
     for( i = 0; i < BD_CONFIG_LEN; i++ )
         serial_debug.printf( "0x%02X ", x411_board_info.config[i] );    
     serial_debug.printf( "\n\r\n\r" );
+}
+
+/*-----------------------------------------------------------*/
+
+// Update cpu usage to public val
+void sys_cpu_usage_update( void )
+{
+#if ( CPU_STAT_LSE == 1 )
+    mbed_stats_cpu_t stats;
+    mbed_stats_cpu_get(&stats);
+    
+    uint64_t diff = (stats.idle_time - sys_prev_idle_time);
+    sys_cpu_usage = 100 - ((diff * 100.0f) / (CPU_USAGE_SAMPLE_TIME*1000));    // usec;;    
+    
+//    serial_debug.printf("\n\r\n\r\n\r[CPU Statistics] uptime: %lu, ", stats.uptime);
+//    serial_debug.printf( "idle_time: %lu, ", stats.idle_time);
+//    serial_debug.printf( "prev_idle_time: %lu, ", sys_prev_idle_time);
+//    serial_debug.printf( "diff: %lu, ", diff);
+//    serial_debug.printf( "sleep_time: %lu, ", stats.sleep_time);
+//    serial_debug.printf( "deep_sleep_time: %lu\n\r", stats.deep_sleep_time);
+//    serial_debug.printf("[CPU Statistics] CPU Usage: %.01f %%\n\r", sys_cpu_usage);//, idle);
+    
+    sys_prev_idle_time = stats.idle_time;
+#endif
+}
+
+/*-----------------------------------------------------------*/
+
+// Dump CPU & OS information to debug interface
+void sys_cpu_info_dump( void )
+{
+    int id;
+    
+    mbed_stats_sys_t stats;
+    mbed_stats_sys_get(&stats);
+    
+    serial_debug.printf( "\n\r\n\r===============================\n\r=     CPU & OS Information    =\n\r===============================\n\r" );    
+    
+    /* CPUID Register information
+    [31:24]Implementer      0x41 = ARM
+    [23:20]Variant          Major revision 0x0  =  Revision 0
+    [19:16]Architecture     0xC  = Baseline Architecture
+                            0xF  = Constant (Mainline Architecture?)
+    [15:4]PartNO            0xC20 =  Cortex-M0
+                            0xC60 = Cortex-M0+
+                            0xC23 = Cortex-M3
+                            0xC24 = Cortex-M4
+                            0xC27 = Cortex-M7
+                            0xD20 = Cortex-M23
+                            0xD21 = Cortex-M33
+    [3:0]Revision           Minor revision: 0x1 = Patch 1.
+    */
+    serial_debug.printf( " CPU ID: 0x%X\n\r", stats.cpu_id );
+    serial_debug.printf( " CPU Vendor: %s\n\r", ( ( stats.cpu_id >> 24 ) == 0x41 ) ? "ARM" : "UNKNOWN" );
+        
+    for (id = 0; id < sizeof( cpu_code_list ) / sizeof( int ); id++)
+    {        
+        if ( ( ( stats.cpu_id >> 4 ) & 0xFFF ) == cpu_code_list[id] )
+            break;
+    }
+    serial_debug.printf( " CPU PartNum: %s\n\r", cpu_part_list[id]);
+    
+    serial_debug.printf( " CPU Major Ver: 0x%X\n\r", ( ( stats.cpu_id >> 20 ) & 0xF ) );
+    serial_debug.printf( " CPU Minor Ver: 0x%X\n\r", ( stats.cpu_id & 0xF ) );
+
+    serial_debug.printf( " OS Ver: 0x%X\n\r", stats.os_version );
+    serial_debug.printf( " Compiler ID: 0x%X\n\r", stats.compiler_id );
+
+    /* Compiler versions:
+       ARM: PVVbbbb (P = Major; VV = Minor; bbbb = build number)
+       GCC: VVRRPP  (VV = Version; RR = Revision; PP = Patch)
+       IAR: VRRRPPP (V = Version; RRR = Revision; PPP = Patch)
+    */
+    serial_debug.printf( " Compiler Ver: 0x%X\n\r", stats.compiler_version );
 }
 
 /*-----------------------------------------------------------*/

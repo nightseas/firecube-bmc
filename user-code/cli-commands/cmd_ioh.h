@@ -1,5 +1,5 @@
 /*
- *  GPIO Debug Commands ( Night CLI Command )
+ *  IO Hub Commands ( Night CLI Command )
  *
  *  Copyright (C) 2017, Xiaohai Li (haixiaolee@gmail.com), All Rights Reserved
  *  This program is lincensed under Apache-2.0/GPLv3 dual-license

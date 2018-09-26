@@ -1,3 +1,6 @@
 [submodule "mbed-os"]
 	path = mbed-os
 	url = http://github.com/ARMmbed/mbed-os
+[submodule "spif-driver"]
+	path = spif-driver
+	url = http://github.com/armmbed/spif-driver
