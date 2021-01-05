@@ -22,18 +22,27 @@
 #include "sys_config.h"
 
 // main() runs in its own thread in the OS
-// (note the calls to Thread::wait below for delays)
 int main()
 {    
     boardlib_init();
-    threads_init();  
     cli_commands_init();
+    threads_init();    
     
     //serial_debug.printf("Thread: <Main thread> entered idle loop!\n\r");
     while(1)
-    {
-        led_mb1 = !led_mb1;
-        Thread::wait(500);
+    {            
+        // LED Breathing indicating heart beats.
+        for( int i = 100; i >= 0; i--)
+        {
+            led_mb1_pwm.write( i / 100.0 );
+            Thread::wait((100-i)/10);
+        }
+        Thread::wait(1000);
+        for( int i = 0; i <= 100; i++)
+        {
+            led_mb1_pwm.write( i / 100.0 );
+            Thread::wait((100-i)/10);
+        }
     }
 }
 

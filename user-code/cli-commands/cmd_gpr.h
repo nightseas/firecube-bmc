@@ -1,5 +1,5 @@
 /*
- *  I/O Control Thread
+ *  GPIO Debug Commands ( Night CLI Command )
  *
  *  Copyright (C) 2017, Xiaohai Li (haixiaolee@gmail.com), All Rights Reserved
  *  This program is lincensed under Apache-2.0/GPLv3 dual-license
@@ -19,17 +19,18 @@
  *
  */
 
-#ifndef _APP_TH_IOCTRL_
-#define _APP_TH_IOCTRL_
+#ifndef _APP_CMD_GPR_
+#define _APP_CMD_GPR_
 
 /*-----------------------------------------------------------*/
 
-extern Thread thread_ioctrl;
+//rgpr command structures
+extern const CLI_Command_t cmd_rgpr;
 
 /*-----------------------------------------------------------*/
 
-// Thread functions
-extern void thread_callback_ioctrl( void );
+//rgpr command functions
+extern int command_callback_rgpr( char *command_output, int output_buf_len, const char *command_string );
 
 #endif
 

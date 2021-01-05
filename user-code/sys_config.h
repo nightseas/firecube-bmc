@@ -23,9 +23,15 @@
 #define _SYS_CONFIG_
 
 // System Includings
+
+// mbed & RTOS lib
 #include "mbed.h"
 #include "rtos.h"
+
+// mbed TLS lib for crypto & hash
 #include "mbedtls/md.h"
+
+// Standard C lib
 #include <string.h>
 #include <stdint.h>
 
@@ -41,6 +47,7 @@
 #include "nightcli.h"
 #include "cmd_common.h"
 #include "cmd_i2c.h"
+#include "cmd_gpr.h"
 
 /*-----------------------------------------------------------*/
 
@@ -50,5 +57,7 @@
 #include "pe_x411_lib.h"
 // STM32F4 UUID Peripheral Lib
 #include "pe_f4_uuid.h"
+
+/*-----------------------------------------------------------*/
 
 #endif

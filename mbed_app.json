@@ -1,0 +1,10 @@
+{
+    "target_overrides": {
+        "NUCLEO_L433RC_P": {
+            "platform.stdio-baud-rate": 115200
+        },
+        "*": {
+            "platform.sys-stats-enabled": true
+        }
+    }
+}
