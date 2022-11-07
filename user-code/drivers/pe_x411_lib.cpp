@@ -63,7 +63,8 @@ volatile int serial_rx_out_inx=0;
 /*-----------------------------------------------------------*/
 
 // LEDs on mother board and daughter board
-PwmOut led_mb1_pwm( PB_13 );
+DigitalOut ssd_pwr_en0( PB_13, 0 );
+DigitalOut ssd_pwr_en1( PB_14, 0 );
 
 // USART connect to PC for debug/cli
 RawSerial serial_debug( PA_2, PA_3, 115200 ); // CLI interface on debug header
@@ -72,7 +73,7 @@ RawSerial serial_debug( PA_2, PA_3, 115200 ); // CLI interface on debug header
 I2C i2c_ms1( PA_10, PA_9 );
 
 // Misc control signals
-DigitalOut reset1(PA_12), reset2(PB_3);
+DigitalOut reset1( PA_4, 0 ), reset2( PA_5, 0 );
 
 /*-----------------------------------------------------------*/
 
@@ -103,12 +104,13 @@ FRU_Info_t x411_board_info =
 int boardlib_init( void )
 {    
     //LED initial states: all on
-    led_mb1_pwm.period_ms(1);
-    led_mb1_pwm.write(0);
+
 
     // Assert resets
     reset1 = 0;
     reset2 = 0;
+    ssd_pwr_en0 = 0;
+    ssd_pwr_en1 = 0;
         
     // Setup serial RX interrupt
     serial_debug.attach(&serial_rx_isr_handler, RawSerial::RxIrq);
@@ -123,9 +125,6 @@ int boardlib_init( void )
     boardlib_info_dump();
 
     logo_ascii_show();
-
-    // LED states after board lib init: all off    
-    led_mb1_pwm.write(1);
 
     // Release resets
     reset1 = 1;

@@ -48,6 +48,8 @@
 #include "cmd_common.h"
 #include "cmd_i2c.h"
 #include "cmd_gpr.h"
+#include "cmd_pc.h"
+#include "cmd_pwr.h"
 
 /*-----------------------------------------------------------*/
 

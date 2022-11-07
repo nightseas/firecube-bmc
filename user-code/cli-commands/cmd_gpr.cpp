@@ -47,8 +47,10 @@ int command_callback_rgpr( char *command_output, int output_buf_len, const char 
 
     serial_debug.printf("\n\r\n\r\n\r===============================\n\r=        GPIO Registers       =\n\r===============================\n\r");
     
-    serial_debug.printf(" RESET IO <1>     : %c\n\r", GET_GPR_STATUS(reset1));
-    serial_debug.printf(" RESET IO <2>     : %c\n\r", GET_GPR_STATUS(reset2));
+    serial_debug.printf(" RESET IO <0>             : %c\n\r", GET_GPR_STATUS(reset1));
+    serial_debug.printf(" RESET IO <1>             : %c\n\r", GET_GPR_STATUS(reset2));
+    serial_debug.printf(" SSD Power Enable <0>     : %c\n\r", GET_GPR_STATUS(ssd_pwr_en0));
+    serial_debug.printf(" SSD Power Enable <1>     : %c\n\r", GET_GPR_STATUS(ssd_pwr_en1));
     
     serial_debug.printf("\n\r\n\r");
     

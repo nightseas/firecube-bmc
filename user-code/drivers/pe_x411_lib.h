@@ -32,7 +32,8 @@
 /*-----------------------------------------------------------*/
 
 // LEDs on mother board and daughter board
-extern PwmOut led_mb1_pwm;
+extern DigitalOut ssd_pwr_en0;
+extern DigitalOut ssd_pwr_en1;
 
 // USART connect to PC for debug/cli
 extern RawSerial serial_debug; // CLI interface on debug header

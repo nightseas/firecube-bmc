@@ -32,17 +32,8 @@ int main()
     while(1)
     {            
         // LED Breathing indicating heart beats.
-        for( int i = 100; i >= 0; i--)
-        {
-            led_mb1_pwm.write( i / 100.0 );
-            Thread::wait((100-i)/10);
-        }
-        Thread::wait(1000);
-        for( int i = 0; i <= 100; i++)
-        {
-            led_mb1_pwm.write( i / 100.0 );
-            Thread::wait((100-i)/10);
-        }
+        // ssd_pwr_en0 = !ssd_pwr_en0;
+        ThisThread::sleep_for(5000);
     }
 }
 
