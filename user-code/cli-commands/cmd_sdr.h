@@ -1,8 +1,7 @@
 /*
- *  I2C Debug Peripheral Lib
+ Power Cycling Command ( Night CLI Command )
  *
- *  Copyright (C) 2017, Xiaohai Li (haixiaolee@gmail.com), All Rights Reserved
- *  This program is lincensed under Apache-2.0/GPLv3 dual-license
+  *  This program is lincensed under Apache-2.0/GPLv3 dual-license
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,18 +18,17 @@
  *
  */
 
-#include "sys_config.h"
+#ifndef _APP_CMD_SDR_
+#define _APP_CMD_SDR_
 
 /*-----------------------------------------------------------*/
 
-int i2c_dbg_write( I2C &i2c_bus, int dev_id, const char *data, int length )
-{
-    return i2c_bus.write( dev_id << 1, data, length );
-}
+//repeater command structures
+extern const CLI_Command_t cmd_sdr;
 
 /*-----------------------------------------------------------*/
 
-int i2c_dbg_read( I2C &i2c_bus, int dev_id, char *data, int length )
-{
-    return i2c_bus.write( dev_id << 1, data, length );
-}
+//repeater command functions
+extern int command_callback_sdr( char *command_output, int output_buf_len, const char *command_string );
+
+#endif

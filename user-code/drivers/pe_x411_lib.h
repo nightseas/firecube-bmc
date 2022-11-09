@@ -25,24 +25,30 @@
 /*-----------------------------------------------------------*/
 
 // On-board LED number
-#define LED_NUM_MAX    1
+#define LED_NUM_MAX         1
 // I2C master number
-#define I2C_MS_MAX     1
+#define I2C_MS_MAX          0
+// PCIe reset delay after power up
+#define PE_RST_DELAY_MS     100
 
 /*-----------------------------------------------------------*/
 
 // LEDs on mother board and daughter board
-extern DigitalOut ssd_pwr_en0;
-extern DigitalOut ssd_pwr_en1;
+extern PwmOut led_mb1_pwm;
+
+// SSD power control
+extern DigitalOut ssd_pwr_en0, ssd_pwr_en1, ssd_pwr_en2, ssd_pwr_en3;
 
 // USART connect to PC for debug/cli
 extern RawSerial serial_debug; // CLI interface on debug header
 
-// I2C master for repeater config
-extern I2C i2c_ms1;
+// SSD reset control
+extern DigitalIn sff_perst0, sff_perst1, sff_perst2, sff_perst3;
+extern DigitalOut ssd_rst0, ssd_rst1, ssd_rst2, ssd_rst3;
 
-// Misc control signals
-extern DigitalOut reset1, reset2;
+// Power monitoring ADC
+extern AnalogIn ssd_vmon0, ssd_vmon1;
+extern AnalogIn mcu_vtemp, mcu_vref, mcu_vbat;
 
 /*-----------------------------------------------------------*/
 

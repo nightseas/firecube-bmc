@@ -47,11 +47,18 @@ int command_callback_rgpr( char *command_output, int output_buf_len, const char 
 
     serial_debug.printf("\n\r\n\r\n\r===============================\n\r=        GPIO Registers       =\n\r===============================\n\r");
     
-    serial_debug.printf(" RESET IO <0>             : %c\n\r", GET_GPR_STATUS(reset1));
-    serial_debug.printf(" RESET IO <1>             : %c\n\r", GET_GPR_STATUS(reset2));
     serial_debug.printf(" SSD Power Enable <0>     : %c\n\r", GET_GPR_STATUS(ssd_pwr_en0));
     serial_debug.printf(" SSD Power Enable <1>     : %c\n\r", GET_GPR_STATUS(ssd_pwr_en1));
-    
+    serial_debug.printf(" SSD Power Enable <2>     : %c\n\r", GET_GPR_STATUS(ssd_pwr_en2));
+    serial_debug.printf(" SSD Power Enable <3>     : %c\n\r", GET_GPR_STATUS(ssd_pwr_en3));
+    serial_debug.printf(" SSD PCIe Reset <0>       : %c\n\r", GET_GPR_STATUS(ssd_rst0));
+    serial_debug.printf(" SSD PCIe Reset <1>       : %c\n\r", GET_GPR_STATUS(ssd_rst1));
+    serial_debug.printf(" SSD PCIe Reset <2>       : %c\n\r", GET_GPR_STATUS(ssd_rst2));
+    serial_debug.printf(" SSD PCIe Reset <3>       : %c\n\r", GET_GPR_STATUS(ssd_rst3));
+    serial_debug.printf(" SFF-8654 PCIe Reset <0>  : %c\n\r", GET_GPR_STATUS(sff_perst0));
+    serial_debug.printf(" SFF-8654 PCIe Reset <1>  : %c\n\r", GET_GPR_STATUS(sff_perst1));
+    serial_debug.printf(" SFF-8654 PCIe Reset <2>  : %c\n\r", GET_GPR_STATUS(sff_perst2));
+    serial_debug.printf(" SFF-8654 PCIe Reset <3>  : %c\n\r", GET_GPR_STATUS(sff_perst3));
     serial_debug.printf("\n\r\n\r");
     
     return 0;

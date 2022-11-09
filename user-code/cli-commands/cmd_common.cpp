@@ -48,10 +48,10 @@ int cli_commands_init( void )
     int ret = 0;
     ret += nightcli_command_register( &cmd_fru );
     ret += nightcli_command_register( &cmd_echo );
-    ret += nightcli_command_register( &cmd_i2c );
     ret += nightcli_command_register( &cmd_rgpr );
     ret += nightcli_command_register( &cmd_pc );
     ret += nightcli_command_register( &cmd_pwr );
+    ret += nightcli_command_register( &cmd_sdr );
     return ret;
 }
 

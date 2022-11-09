@@ -46,10 +46,10 @@
 // Night-CLI and CLI relative commands
 #include "nightcli.h"
 #include "cmd_common.h"
-#include "cmd_i2c.h"
 #include "cmd_gpr.h"
 #include "cmd_pc.h"
 #include "cmd_pwr.h"
+#include "cmd_sdr.h"
 
 /*-----------------------------------------------------------*/
 

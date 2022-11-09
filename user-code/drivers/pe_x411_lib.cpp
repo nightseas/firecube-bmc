@@ -63,17 +63,22 @@ volatile int serial_rx_out_inx=0;
 /*-----------------------------------------------------------*/
 
 // LEDs on mother board and daughter board
-DigitalOut ssd_pwr_en0( PB_13, 0 );
-DigitalOut ssd_pwr_en1( PB_14, 0 );
+PwmOut led_mb1_pwm( PA_8 );
+
+// SSD power control
+DigitalOut ssd_pwr_en0( PB_13, 1 ), ssd_pwr_en1( PB_14, 1 ), ssd_pwr_en2( PB_15, 1 ), ssd_pwr_en3( PA_15, 1 );
+
+// SSD reset control
+DigitalIn sff_perst0( PA_4 ), sff_perst1( PA_5 ), sff_perst2( PA_6 ), sff_perst3( PA_7 );
+DigitalOut ssd_rst0( PB_8, 0 ), ssd_rst1( PB_9, 0 ), ssd_rst2( PB_10, 0 ), ssd_rst3( PB_12, 0 );
 
 // USART connect to PC for debug/cli
-RawSerial serial_debug( PA_2, PA_3, 115200 ); // CLI interface on debug header
+RawSerial serial_debug( PA_9, PA_10, 115200 ); // CLI interface on debug header
 
-// I2C master for repeater config
-I2C i2c_ms1( PA_10, PA_9 );
+// Power monitoring ADC
+AnalogIn ssd_vmon0( PA_0 ), ssd_vmon1( PA_1 ); //, ssd_vmon2( PA_2 ), ssd_vmon3( PA_3 );
+AnalogIn mcu_vtemp( ADC_TEMP ), mcu_vref( ADC_VREF ), mcu_vbat( ADC_VBAT );
 
-// Misc control signals
-DigitalOut reset1( PA_4, 0 ), reset2( PA_5, 0 );
 
 /*-----------------------------------------------------------*/
 
@@ -104,14 +109,9 @@ FRU_Info_t x411_board_info =
 int boardlib_init( void )
 {    
     //LED initial states: all on
-
-
-    // Assert resets
-    reset1 = 0;
-    reset2 = 0;
-    ssd_pwr_en0 = 0;
-    ssd_pwr_en1 = 0;
-        
+    led_mb1_pwm.period_ms(1);
+    led_mb1_pwm.write(0);
+           
     // Setup serial RX interrupt
     serial_debug.attach(&serial_rx_isr_handler, RawSerial::RxIrq);
 
@@ -126,9 +126,25 @@ int boardlib_init( void )
 
     logo_ascii_show();
 
+    // Assert resets
+    ssd_rst0 = 0;
+    ssd_rst1 = 0;
+    ssd_rst2 = 0;
+    ssd_rst3 = 0;
+
+    // Power on SSDs
+    ssd_pwr_en0 = 1;
+    ssd_pwr_en1 = 1;
+    ssd_pwr_en2 = 1;
+    ssd_pwr_en3 = 1;
+
+    ThisThread::sleep_for(100);
+    
     // Release resets
-    reset1 = 1;
-    reset2 = 1;
+    ssd_rst0 = 1;
+    ssd_rst1 = 1;
+    ssd_rst2 = 1;
+    ssd_rst3 = 1;
      
     // TBD: No failure handling for now!
     return 0;

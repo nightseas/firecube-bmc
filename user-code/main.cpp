@@ -28,12 +28,22 @@ int main()
     cli_commands_init();
     threads_init();    
     
-    //serial_debug.printf("Thread: <Main thread> entered idle loop!\n\r");
+    // serial_debug.printf("Thread: <Main thread> entered idle loop!\n\r");
     while(1)
     {            
         // LED Breathing indicating heart beats.
-        // ssd_pwr_en0 = !ssd_pwr_en0;
-        ThisThread::sleep_for(5000);
+        for( int i = 100; i >= 0; i--)
+        {
+            led_mb1_pwm.write( i / 100.0 );
+            ThisThread::sleep_for((100-i)/10);
+        }
+        ThisThread::sleep_for(1000);
+        for( int i = 0; i <= 100; i++)
+        {
+            led_mb1_pwm.write( i / 100.0 );
+            ThisThread::sleep_for((100-i)/10);
+        }
+        
     }
 }
 

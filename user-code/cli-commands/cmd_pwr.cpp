@@ -20,14 +20,17 @@
  
 #include "sys_config.h"
 
+#define MAC_CH_NUM 4
+
 /*-----------------------------------------------------------*/
 
 const CLI_Command_t cmd_pwr =
 {
     "pwr",
     "\r\npwr:\r\n Power cycling operations...\r\n \
-    pwr <on|off> <channel>\r\n \
-    <channel> Power control channel, 0 - CH0, 1 - CH1\r\n\r\n",
+    pwr <on|off> <channel> [delay]\r\n \
+    <channel> Power control channel, 0 - all channels, 1..4 - CH1..4\r\n \
+    [delay] delay time (ms) before power switching, default: no delay.\r\n\r\n",
     command_callback_pwr,
     -1 // The user can enter any number of commands.
 };
@@ -45,6 +48,7 @@ int command_callback_pwr( char *command_output, int output_buf_len, const char *
         return -1;
     
     int ch_num, pwr_on_flag = 0;
+    int pwr_delay = 0;
 
     // Get prameter 1: on|off
     pt_parameter = nightcli_command_get_param( command_string, 1, &param_string_len );
@@ -74,31 +78,92 @@ int command_callback_pwr( char *command_output, int output_buf_len, const char *
     // Get prameter 2: channel number
     if (pt_parameter != NULL && sscanf(pt_parameter, "%d", &ch_num) == 1)
     {
-        if( ch_num < 0 || ch_num > 1 )
+        if( ch_num < 0 || ch_num > MAC_CH_NUM )
         {
-            serial_debug.printf( "pc: Invalid channel number. Enter 'help' for more information.\n\r\n\r" );
+            serial_debug.printf( "pwr: Invalid channel number. Enter 'help' for more information.\n\r\n\r" );
             return -3;
         }
     }
     else
     {
-        serial_debug.printf( "pc: Invalid channel number. Enter 'help' for more information.\n\r\n\r" );
+        serial_debug.printf( "pwr: Invalid channel number. Enter 'help' for more information.\n\r\n\r" );
         return -4;
     }
 
+    pt_parameter = nightcli_command_get_param( command_string, 3, &param_string_len );
 
-    serial_debug.printf( "pwr: Turn %s power of channel %d...\n\r\n\r", pwr_on_flag?"ON":"OFF", ch_num);
+    // Get prameter 3: power delay in ms
+    if (pt_parameter != NULL && sscanf(pt_parameter, "%d", &pwr_delay) == 1)
+    {
+        if( pwr_delay > 0 )
+        {
+            serial_debug.printf( "pwr: Delay for %d ms...\n\r\n\r", pwr_delay );
+            ThisThread::sleep_for(pwr_delay);
+        }
+    }
+
+    if(!ch_num)
+    {
+        serial_debug.printf( "pwr: Turn %s power of all channels ...\n\r\n\r", pwr_on_flag?"ON":"OFF");
+    }
+    else
+    {
+        serial_debug.printf( "pwr: Turn %s power of channel %d...\n\r\n\r", pwr_on_flag?"ON":"OFF", ch_num);
+    }
+    
 
 
     switch(ch_num)
     {
         case 0:
-            // Relay control: LOW is connected, and HIGH is open circuit of power
-            ssd_pwr_en0 = pwr_on_flag ? 0 : 1;
+            ssd_pwr_en0 = pwr_on_flag;
+            ssd_pwr_en1 = pwr_on_flag;
+            ssd_pwr_en2 = pwr_on_flag;
+            ssd_pwr_en3 = pwr_on_flag;
+            if(pwr_on_flag)
+            {
+                ThisThread::sleep_for(PE_RST_DELAY_MS);
+            }
+            ssd_rst0 = pwr_on_flag;
+            ssd_rst1 = pwr_on_flag;
+            ssd_rst2 = pwr_on_flag;
+            ssd_rst3 = pwr_on_flag;
         break;
 
         case 1:
-            ssd_pwr_en1 = pwr_on_flag ? 0 : 1;
+            ssd_pwr_en0 = pwr_on_flag;
+            if(pwr_on_flag)
+            {
+                ThisThread::sleep_for(PE_RST_DELAY_MS);
+            }
+            ssd_rst0 = pwr_on_flag;
+        break;
+
+        case 2:
+            ssd_pwr_en1 = pwr_on_flag;
+            if(pwr_on_flag)
+            {
+                ThisThread::sleep_for(PE_RST_DELAY_MS);
+            }
+            ssd_rst1 = pwr_on_flag;
+        break;
+
+        case 3:
+            ssd_pwr_en2 = pwr_on_flag;
+            if(pwr_on_flag)
+            {
+                ThisThread::sleep_for(PE_RST_DELAY_MS);
+            }
+            ssd_rst2 = pwr_on_flag;
+        break;
+
+        case 4:
+            ssd_pwr_en3 = pwr_on_flag;
+            if(pwr_on_flag)
+            {
+                ThisThread::sleep_for(PE_RST_DELAY_MS);
+            }
+            ssd_rst3 = pwr_on_flag;
         break;
 
         default:
